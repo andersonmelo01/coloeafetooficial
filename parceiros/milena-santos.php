@@ -36,8 +36,8 @@ require_once __DIR__ . '/../includes/header.php';
                         <div class="col-md-6">
                             <div class="partner-contact-card">
                                 <span class="contact-card-title">Contato direto</span>
-                                <a class="contact-link" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
-                                <a class="contact-link" href="mailto:milena@example.com"><i class="bi bi-envelope"></i> milena@example.com</a>
+                                <a class="contact-link" href="https://wa.me/5522988441463" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                                <a class="contact-link" href="mailto:millenalion2017@gmail.com"><i class="bi bi-envelope"></i> milena@example.com</a>
                             </div>
                         </div>
                         <div class="col-md-6">

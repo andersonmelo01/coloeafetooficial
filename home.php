@@ -105,7 +105,7 @@ require_once __DIR__ . '/includes/header.php';
                 <p>Com formação dedicada ao cuidado materno, Thais estruturou a Colo & Afeto para oferecer escuta, orientação e acolhimento real às mães em cada fase da jornada.</p>
                 <p>Seu trabalho traz atenção pessoal ao pós-parto, à amamentação e ao suporte emocional, criando caminhos mais seguros e tranquilos para a rotina familiar.</p>
                 <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
-                    <a class="btn btn-brand btn-lg" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> Falar com Thais</a>
+                    <a class="btn btn-brand btn-lg" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> Falar com Thais</a>
                     <a class="btn btn-outline-brand btn-lg" href="#sobre">Conheça o cuidado</a>
                 </div>
             </div>
@@ -158,7 +158,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div class="afeto-service-actions">
                         <a class="btn btn-brand btn-sm" href="<?= e(base_url('servico.php?slug=atendimento-materno')) ?>">Mais detalhes</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
                     </div>
                 </article>
             </div>
@@ -173,7 +173,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div class="afeto-service-actions">
                         <a class="btn btn-brand btn-sm" href="<?= e(base_url('servico.php?slug=amamentacao-pos-parto')) ?>">Mais detalhes</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
                     </div>
                 </article>
             </div>
@@ -188,7 +188,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div class="afeto-service-actions">
                         <a class="btn btn-brand btn-sm" href="<?= e(base_url('servico.php?slug=taping-pos-parto')) ?>">Mais detalhes</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
                     </div>
                 </article>
             </div>
@@ -203,7 +203,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div class="afeto-service-actions">
                         <a class="btn btn-brand btn-sm" href="<?= e(base_url('servico.php?slug=furinho-humanizado')) ?>">Mais detalhes</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
                     </div>
                 </article>
             </div>
@@ -218,7 +218,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div class="afeto-service-actions">
                         <a class="btn btn-brand btn-sm" href="<?= e(base_url('servico.php?slug=doula')) ?>">Mais detalhes</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5522988441463" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
                     </div>
                 </article>
             </div>
@@ -241,7 +241,7 @@ require_once __DIR__ . '/includes/header.php';
                     <p class="txt_global">Milena atua como doula parceira, oferecendo apoio emocional e prático para gestantes e puérperas.</p>
                     <div class="partner-actions">
                         <a class="btn btn-outline-brand btn-sm" href="<?= e(base_url('parceiros/milena-santos.php')) ?>">Ver perfil</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5522988441463" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
                     </div>
                 </article>
             </div>
@@ -326,7 +326,7 @@ require_once __DIR__ . '/includes/header.php';
             <h2>Pronta para receber<br><em>cuidado de verdade?</em></h2>
             <p>Entre em contato e agende seu atendimento. A Colo & Afeto existe para caminhar com voce nessa fase tao especial da vida.</p>
             <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-                <a class="btn btn-brand btn-lg" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> Falar pelo WhatsApp</a>
+                <a class="btn btn-brand btn-lg" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> Falar pelo WhatsApp</a>
                 <a href="https://instagram.com" class="btn btn-outline-brand btn-lg" target="_blank"><i class="bi bi-instagram"></i> Ver no Instagram</a>
                 <a class="btn btn-outline-brand btn-lg" href="<?= e(base_url('auth/cadastro.php')) ?>"><i class="bi bi-person-plus"></i> Criar cadastro</a>
             </div>

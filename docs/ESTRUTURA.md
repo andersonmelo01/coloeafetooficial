@@ -32,6 +32,7 @@ Troque essa senha antes de publicar.
 
 ## Observacoes de producao
 
+- O manual completo de instalacao em VPS Ubuntu com Apache2 e MySQL esta em `docs/INSTALACAO_VPS_UBUNTU.md`.
 - Instalar dependencias com Composer quando for usar integracoes:
   - `composer install`
   - SPED-NFe: `nfephp-org/sped-nfe`
