@@ -1,0 +1,16 @@
+{
+    "name": "colo-afeto/ecommerce",
+    "description": "Landing page e e-commerce Colo e Afeto com modulos fiscal e pagamento.",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "nfephp-org/sped-nfe": "^5.0",
+        "efipay/sdk-php-apis-efi": "^1.0",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "ColoAfeto\\": "src/"
+        }
+    }
+}

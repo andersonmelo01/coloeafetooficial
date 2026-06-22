@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doula | Colo e Afeto</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+  :root {
+    --brand-orange: #f4621f;
+    --brand-pink:   #e8407a;
+    --brand-wine:   #6b1f3a;
+    --brand-cream:  #fff7ef;
+    --brand-ink:    #2c1620;
+    --brand-muted:  #7d5967;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', Arial, sans-serif;
+    color: var(--brand-ink);
+    background: #fffaf5;
+  }
+
+  a { text-decoration: none; }
+
+  .soft-shadow  { box-shadow: 0 6px 24px rgba(107,31,58,.08); }
+  .section-title { font-family: 'Playfair Display', Georgia, serif; color: var(--brand-wine); font-weight: 700; }
+  .eyebrow {
+    color: var(--brand-orange);
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: rgba(253,246,238,.95);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(244,98,31,.18);
+    padding: .9rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--brand-wine);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  .brand span { color: var(--brand-orange); }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--brand-ink);
+    font-size: .92rem;
+    font-weight: 600;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--brand-orange); }
+  .btn-nav {
+    background: var(--brand-orange);
+    color: #fff !important;
+    padding: .45rem 1.1rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: .88rem;
+    transition: background .2s;
+  }
+  .btn-nav:hover { background: var(--brand-pink); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #faf0e6;
+    padding: 6rem 0 5rem;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 58% 72% at 78% 34%, rgba(244,98,31,.15), transparent 64%),
+      radial-gradient(ellipse 45% 54% at 12% 92%, rgba(232,64,122,.11), transparent 62%);
+  }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .afeto-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .55rem 1.15rem;
+    border: 1.5px solid rgba(244,98,31,.28);
+    border-radius: 999px;
+    background: rgba(244,98,31,.1);
+    color: var(--brand-orange);
+    font-size: .76rem;
+    font-weight: 900;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--brand-wine);
+    font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+    font-weight: 700;
+    line-height: 1.08;
+    margin-bottom: 1.2rem;
+  }
+  .hero-title span { color: var(--brand-pink); font-style: italic; }
+  .hero-sub {
+    color: var(--brand-muted);
+    font-size: 1.05rem;
+    line-height: 1.85;
+    margin-bottom: 2rem;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+  .btn-primary-brand {
+    background: var(--brand-orange);
+    color: #fff;
+    padding: .75rem 1.8rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: 0 8px 28px rgba(244,98,31,.25);
+    transition: all .2s;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .btn-primary-brand:hover { background: var(--brand-pink); color: #fff; transform: translateY(-2px); }
+
+  .btn-ghost-brand {
+    color: var(--brand-wine);
+    border: 2px solid rgba(107,31,58,.25);
+    padding: .73rem 1.7rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all .2s;
+    display: inline-block;
+  }
+  .btn-ghost-brand:hover { background: var(--brand-wine); color: #fff; }
+
+  /* ── FOTO PROFISSIONAL ── */
+  .foto-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  /*
+   * ─────────────────────────────────────────────────────────────────
+   *  ESPAÇO EXCLUSIVO PARA FOTO PROFISSIONAL
+   *  Para inserir sua foto, substitua o conteúdo interno de .foto-frame
+   *  pelo elemento:
+   *    <img src="caminho/para/sua-foto.jpg" alt="Nome da Doula">
+   *  O contêiner tem 380×460px e recorte em formato orgânico arredondado.
+   * ─────────────────────────────────────────────────────────────────
+   */
+  .foto-frame {
+    width: 380px;
+    height: 460px;
+    border-radius: 40% 60% 55% 45% / 45% 42% 58% 55%;
+    overflow: hidden;
+    border: 4px solid rgba(244,98,31,.22);
+    box-shadow: 0 24px 72px rgba(107,31,58,.18);
+    position: relative;
+    background: linear-gradient(145deg, #f9e0d0, #fce8f0);
+  }
+  .foto-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .foto-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(145deg, rgba(244,98,31,.08), rgba(232,64,122,.1));
+  }
+  .foto-placeholder i { font-size: 3.5rem; color: rgba(107,31,58,.3); }
+  .foto-placeholder p {
+    color: rgba(107,31,58,.45);
+    font-size: .85rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.5;
+    padding: 0 1rem;
+  }
+  .foto-badge {
+    position: absolute;
+    bottom: -14px;
+    right: -14px;
+    background: #fff;
+    border: 2px solid rgba(244,98,31,.2);
+    border-radius: 16px;
+    padding: .65rem 1.1rem;
+    box-shadow: 0 8px 24px rgba(107,31,58,.12);
+  }
+  .foto-badge strong {
+    display: block;
+    color: var(--brand-orange);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+  .foto-badge span { color: var(--brand-muted); font-size: .75rem; }
+
+  /* ── STATS ── */
+  .stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(244,98,31,.15);
+  }
+  .stat strong {
+    display: block;
+    color: var(--brand-orange);
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .stat span { color: var(--brand-muted); font-size: .82rem; font-weight: 600; }
+
+  /* ── SECTIONS SHARED ── */
+  section { padding: 5rem 0; }
+  .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-header p {
+    color: var(--brand-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin: .8rem auto 0;
+  }
+
+  /* ── SOBRE ── */
+  .sobre { background: #fff; }
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .sobre-texto h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--brand-wine);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 1rem 0;
+  }
+  .sobre-texto p { color: var(--brand-muted); line-height: 1.85; margin-bottom: 1rem; }
+  .sobre-chips { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; }
+  .chip {
+    background: rgba(244,98,31,.1);
+    color: var(--brand-orange);
+    border: 1.5px solid rgba(244,98,31,.25);
+    border-radius: 999px;
+    padding: .35rem 1rem;
+    font-size: .8rem;
+    font-weight: 800;
+  }
+  /*
+   * ─────────────────────────────────────────────────────────────────
+   *  ESPAÇO SECUNDÁRIO PARA FOTO (seção Sobre)
+   *  Para usar, substitua o conteúdo de .sobre-foto-frame por:
+   *    <img src="caminho/sua-foto2.jpg" alt="Nome da Doula"
+   *         style="width:100%;height:100%;object-fit:cover;border-radius:2rem;">
+   * ─────────────────────────────────────────────────────────────────
+   */
+  .sobre-foto {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: 2rem;
+    overflow: hidden;
+    border: 3px solid rgba(107,31,58,.1);
+    background: linear-gradient(145deg, #f9e0d0, #fce8f0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+  }
+  .sobre-foto i { font-size: 2.5rem; color: rgba(107,31,58,.3); }
+  .sobre-foto p {
+    color: rgba(107,31,58,.4);
+    font-size: .8rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0 1.5rem;
+    line-height: 1.4;
+  }
+
+  /* ── SERVIÇOS ── */
+  .servicos { background: var(--brand-cream); }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .card-servico {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    border: 1.5px solid rgba(107,31,58,.08);
+    box-shadow: 0 4px 20px rgba(107,31,58,.06);
+    transition: transform .2s, box-shadow .2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-servico:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(107,31,58,.12); }
+  .card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(244,98,31,.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+  }
+  .card-icon i { font-size: 1.6rem; color: var(--brand-orange); }
+  .card-servico h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--brand-wine);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: .6rem;
+  }
+  .card-servico p { color: var(--brand-muted); font-size: .9rem; line-height: 1.7; margin-bottom: 1.5rem; flex: 1; }
+  .card-link {
+    color: var(--brand-orange);
+    font-weight: 800;
+    font-size: .88rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    transition: gap .2s;
+  }
+  .card-link:hover { gap: .7rem; color: var(--brand-pink); }
+
+  /* ── DEPOIMENTOS ── */
+  .depoimentos { background: #fff; }
+  .dep-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .dep-card {
+    background: var(--brand-cream);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    border: 1.5px solid rgba(244,98,31,.15);
+  }
+  .dep-card p { color: var(--brand-muted); line-height: 1.8; font-size: .95rem; margin-bottom: 1.2rem; font-style: italic; }
+  .dep-autor { display: flex; align-items: center; gap: .75rem; }
+  .dep-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-orange), var(--brand-pink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: .9rem;
+    flex-shrink: 0;
+  }
+  .dep-autor strong { display: block; color: var(--brand-wine); font-size: .9rem; }
+  .dep-autor span { color: var(--brand-muted); font-size: .78rem; }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--brand-wine) 0%, #9d2d56 100%);
+    padding: 5rem 0;
+    text-align: center;
+  }
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .cta-section p {
+    color: rgba(255,255,255,.75);
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+    padding: .85rem 2rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: 0 14px 38px rgba(37,211,102,.3);
+    transition: all .2s;
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  .btn-whatsapp:hover { background: #1ebe5a; color: #fff; transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--brand-ink);
+    color: rgba(255,255,255,.6);
+    text-align: center;
+    padding: 2rem 1.5rem;
+    font-size: .85rem;
+  }
+  footer strong { color: rgba(255,255,255,.9); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-inner,
+    .sobre-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .foto-frame { width: 280px; height: 340px; }
+    .foto-wrapper { order: -1; }
+    .stats { gap: 1.5rem; }
+    .hero-title { font-size: 2.2rem; }
+    .nav-links { display: none; }
+    .cta-section h2 { font-size: 1.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ NAV ═══════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="brand">Colo <span>&</span> Afeto</a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#contato" class="btn-nav">Agendar conversa</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+
+    <!-- Texto -->
+    <div class="hero-content">
+      <div class="afeto-tag">
+        <i class="bi bi-heart-fill"></i> Doula certificada
+      </div>
+      <h1 class="hero-title">
+        Presença que <span>acolhe</span>,<br>cuidado que transforma
+      </h1>
+      <p class="hero-sub">
+        Acompanhamento humanizado no pré-natal, parto e pós-parto.
+        Juntas, cada passo da sua jornada com confiança e amor.
+      </p>
+      <div class="hero-actions">
+        <a href="#contato" class="btn-primary-brand">
+          <i class="bi bi-whatsapp"></i> Fale comigo
+        </a>
+        <a href="#servicos" class="btn-ghost-brand">Ver serviços</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>200+</strong><span>Partos acompanhados</span></div>
+        <div class="stat"><strong>8+</strong><span>Anos de experiência</span></div>
+        <div class="stat"><strong>98%</strong><span>Mães satisfeitas</span></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         FOTO PROFISSIONAL — HERO
+         Substitua o bloco .foto-placeholder pelo seu <img>:
+           <img src="sua-foto.jpg" alt="Nome da Doula">
+         Dimensão do contêiner: 380 x 460 px (recorte orgânico)
+    ══════════════════════════════════════════════════ -->
+    <div class="foto-wrapper">
+      <div class="foto-frame">
+        <img src="../img/millena_perfil.jpeg" alt="Milena" loading="lazy">
+      </div>
+      <div class="foto-badge">
+        <strong>♥</strong>
+        <span>Certificada DONA</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ SOBRE ═══════════════════════ -->
+<section class="sobre" id="sobre">
+  <div class="section-inner">
+    <div class="sobre-grid">
+
+      <!-- ══════════════════════════════════════════════════
+           FOTO SECUNDÁRIA — SOBRE (opcional)
+           Substitua o bloco interno por:
+             <img src="sua-foto2.jpg" alt="Nome da Doula"
+                  style="width:100%;height:100%;object-fit:cover;">
+      ══════════════════════════════════════════════════ -->
+      <div class="sobre-foto">
+        <!-- ↓↓↓ SUBSTITUA ESTE BLOCO PELA SUA FOTO ↓↓↓ -->
+        <img src="../img/millena_pro.png" alt="Milena" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        <!-- ↑↑↑ FIM DO PLACEHOLDER ↑↑↑ -->
+      </div>
+
+      <div class="sobre-texto">
+        <span class="eyebrow">Quem sou eu</span>
+        <h2>Uma parceira para a jornada mais especial da sua vida</h2>
+        <p>
+          Sou doula certificada, com formação em amamentação, pré-natal holístico e suporte emocional perinatal.
+          Acredito que cada nascimento é único e merece ser vivido com dignidade, escolha e amor.
+        </p>
+        <p>
+          Meu trabalho é estar ao seu lado — e ao lado da sua família — oferecendo informação, conforto e presença real.
+          Do primeiro contato à semana do pós-parto, você nunca estará sozinha.
+        </p>
+        <div class="sobre-chips">
+          <span class="chip">Pré-natal</span>
+          <span class="chip">Parto humanizado</span>
+          <span class="chip">Pós-parto</span>
+          <span class="chip">Suporte emocional</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SERVIÇOS ═══════════════════════ -->
+<section class="servicos" id="servicos">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="eyebrow">O que ofereço</span>
+      <h2 class="section-title" style="font-size:2rem;margin-top:.8rem">Serviços com cuidado e inteireza</h2>
+      <p>Cada atendimento é pensado para acolher você de forma completa — corpo, mente e coração.</p>
+    </div>
+    <div class="cards-grid">
+
+      <div class="card-servico">
+        <div class="card-icon"><i class="bi bi-balloon-heart"></i></div>
+        <h3>Acompanhamento Pré-natal</h3>
+        <p>Encontros mensais para preparar seu corpo e mente para o nascimento, com exercícios, informações e suporte emocional.</p>
+        <a href="#contato" class="card-link">Saiba mais <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+      <div class="card-servico">
+        <div class="card-icon"><i class="bi bi-hospital"></i></div>
+        <h3>Suporte ao Parto</h3>
+        <p>Presença contínua durante o trabalho de parto, com técnicas de conforto, respiração e advocacia pelos seus direitos.</p>
+        <a href="#contato" class="card-link">Saiba mais <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+      <div class="card-servico">
+        <div class="card-icon"><i class="bi bi-heart-pulse"></i></div>
+        <h3>Cuidado Pós-parto</h3>
+        <p>Visitas domiciliares nas primeiras semanas, apoio à amamentação, ajuda na recuperação física e suporte emocional.</p>
+        <a href="#contato" class="card-link">Saiba mais <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+      <div class="card-servico">
+        <div class="card-icon"><i class="bi bi-chat-heart"></i></div>
+        <h3>Consulta Online</h3>
+        <p>Atendimento remoto para gestantes de qualquer lugar. Tire dúvidas, receba orientações e sinta-se acompanhada onde estiver.</p>
+        <a href="#contato" class="card-link">Saiba mais <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ DEPOIMENTOS ═══════════════════════ -->
+<section class="depoimentos" id="depoimentos">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="eyebrow">Depoimentos</span>
+      <h2 class="section-title" style="font-size:2rem;margin-top:.8rem">O que as mamães dizem</h2>
+    </div>
+    <div class="dep-grid">
+
+      <div class="dep-card">
+        <p>"Ter uma doula foi a melhor decisão que tomei. Me senti segura, respeitada e amada durante todo o parto. Não consigo imaginar aquele dia sem ela."</p>
+        <div class="dep-autor">
+          <div class="dep-avatar">AM</div>
+          <div>
+            <strong>Ana Maria</strong>
+            <span>Mãe da Beatriz, 6 meses</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dep-card">
+        <p>"O suporte no pós-parto foi incrível. As visitas em casa me ajudaram muito na amamentação e no meu bem-estar emocional. Gratidão enorme!"</p>
+        <div class="dep-autor">
+          <div class="dep-avatar">CF</div>
+          <div>
+            <strong>Carla Fernandes</strong>
+            <span>Mãe do Gabriel, 1 ano</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dep-card">
+        <p>"Chegamos ao parto preparados graças às consultas pré-natais. Meu marido também se sentiu acolhido e participativo. Foi lindo demais!"</p>
+        <div class="dep-autor">
+          <div class="dep-avatar">RS</div>
+          <div>
+            <strong>Renata &amp; Sérgio</strong>
+            <span>Pais da Sofia, 3 meses</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ CTA / CONTATO ═══════════════════════ -->
+<section class="cta-section" id="contato">
+  <div class="section-inner">
+    <h2>Vamos conversar?</h2>
+    <p>Agende uma conversa gratuita de 30 minutos e descubra como posso te acompanhar nessa jornada.</p>
+    <!--
+      ATENÇÃO: substitua o número abaixo pelo seu número de WhatsApp
+      Formato: https://wa.me/55DDDNUMERO (sem espaços ou traços)
+      Exemplo: https://wa.me/5521999998888
+    -->
+    <a href="https://wa.me/5521999999999" class="btn-whatsapp" target="_blank" rel="noopener">
+      <i class="bi bi-whatsapp"></i> Agendar pelo WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer>
+  <strong>Colo &amp; Afeto</strong> — Doula certificada &middot; Todos os direitos reservados &middot; 2025
+</footer>
+
+</body>
+</html>
