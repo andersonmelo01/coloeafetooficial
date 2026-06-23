@@ -90,30 +90,39 @@ body {
 }
 
 .afeto-service-actions {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: .75rem;
     margin-top: auto;
 }
 
 .afeto-service-actions a {
-    min-width: calc(50% - .375rem);
-    flex: 1 1 50%;
+    min-width: 0;
+    width: 100%;
 }
 
 .afeto-service-actions a.btn {
+    --bs-btn-border-radius: 999px;
+    align-items: center;
+    display: inline-flex;
     font-family: 'Playfair Display', Georgia, serif !important;
     font-style: italic !important;
+    justify-content: center;
+    line-height: 1.2;
+    min-height: 2.5rem;
+    overflow: hidden;
+    padding-inline: .85rem;
+    text-align: center;
+    white-space: nowrap;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1199.98px) {
     .afeto-service-actions {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
     .afeto-service-actions a {
-        min-width: 100%;
-        flex: 1 1 100%;
+        min-width: 0;
     }
 }
 
