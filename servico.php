@@ -34,7 +34,11 @@ require_once __DIR__ . '/includes/header.php';
                     <?php endforeach; ?>
                 </ul>
                 <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
-                    <a class="btn btn-whatsapp btn-lg" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> Falar pelo WhatsApp</a>
+                    <?php if ($slug === 'doula'): ?>
+                        <a class="btn btn-whatsapp btn-lg" href="https://wa.me/5522988441463" target="_blank"><i class="bi bi-whatsapp"></i> Falar pelo WhatsApp</a>
+                    <?php else: ?>
+                        <a class="btn btn-whatsapp btn-lg" href="https://wa.me/5521982846871" target="_blank"><i class="bi bi-whatsapp"></i> Falar pelo WhatsApp</a>    
+                    <?php endif; ?>
                     <a class="btn btn-outline-brand btn-lg" href="<?= e(base_url('home.php#servicos')) ?>">Voltar aos serviços</a>
                 </div>
             </div>
