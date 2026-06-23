@@ -37,9 +37,13 @@ body {
     color: var(--brand-orange);
 }
 
+#spanlogo{
+    color: var(--brand-pink);
+}
+
 .brand-logo-img {
     display: block;
-    height: 100px;
+    height: 180px;
     width: auto;
     max-width: 580px;
     object-fit: contain;
@@ -395,6 +399,7 @@ body {
     position: relative;
     background: #fff;
     overflow: hidden;
+    padding: 1.5rem 0;
 }
 
 .afeto-about::before {
@@ -410,6 +415,7 @@ body {
 
 .afeto-founder {
     background: rgba(255, 250, 245, 1);
+    padding: 1.5rem 0;
 }
 
 .afeto-founder .afeto-section-tag {
@@ -557,6 +563,7 @@ body {
     position: relative;
     overflow: hidden;
     background: linear-gradient(165deg, var(--brand-wine), #4a0d25);
+    padding: 1.5rem 0;
 }
 
 .afeto-services::before,
@@ -775,7 +782,7 @@ body {
 
 .afeto-parceiros {
     background: #fffaf5;
-    padding: 4.5rem 0;
+    padding: 1.5rem 0;
 }
 
 .afeto-parceiros .container {
@@ -871,7 +878,7 @@ body {
 
 .afeto-service-detail,
 .afeto-partner-detail {
-    padding: 6.5rem 0;
+    padding: 0;
     background: #fffaf5;
 }
 

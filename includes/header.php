@@ -21,7 +21,10 @@ $bodyClass = $bodyClass ?? '';
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom soft-shadow site-navbar">
     <div class="container">
         <a class="navbar-brand fw-bold brand-mark d-flex align-items-center" href="<?= e(base_url('home.php')) ?>">
-            <img class="brand-logo-img" src="<?= e(base_url('img/logo.jpeg')) ?>" alt="Colo e Afeto">
+            <!-- <img class="brand-logo-img" src="<?= e(base_url('img/logo.jpeg')) ?>" alt="Colo e Afeto"> -->
+             <span>Colo </span>
+             <strong> & </strong>
+             <span id="spanlogo"> Afeto</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menu">
             <span class="navbar-toggler-icon"></span>

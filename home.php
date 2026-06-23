@@ -75,9 +75,10 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="afeto-visual" aria-label="Identidade visual Colo e Afeto">
                     <div class="afeto-blob">
                         <div class="afeto-logo-mark">
-                            <span>Colo</span>
+                            <!--<span>Colo</span>
                             <strong>&</strong>
-                            <span>Afeto</span>
+                            <span>Afeto</span>-->
+                            <img class="brand-logo-img" src="<?= e(base_url('img/logo.jpeg')) ?>" alt="Colo e Afeto">
                         </div>
                         <p>Thais Rocha</p>
                     </div>
