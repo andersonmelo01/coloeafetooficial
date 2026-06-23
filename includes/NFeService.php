@@ -25,7 +25,7 @@ function nfe_validate_order(int $pedidoId): array
     );
 
     if (!$pedido) {
-        return ['ok' => false, 'message' => 'Pedido nao encontrado.'];
+        return ['ok' => false, 'message' => 'Pedido não encontrado.'];
     }
 
     if (!fiscal_enabled()) {
@@ -35,16 +35,16 @@ function nfe_validate_order(int $pedidoId): array
     $requiredConfig = [
         'fiscal.uf' => 'UF do emitente',
         'fiscal.cnpj' => 'CNPJ do emitente',
-        'fiscal.razao_social' => 'Razao social',
-        'fiscal.inscricao_estadual' => 'Inscricao estadual',
-        'fiscal.crt' => 'CRT/regime tributario',
-        'fiscal.serie_nfe' => 'Serie da NF-e',
-        'fiscal.proximo_numero_nfe' => 'Proximo numero da NF-e',
-        'fiscal.codigo_municipio' => 'Codigo IBGE do municipio',
+        'fiscal.razao_social' => 'Razão social',
+        'fiscal.inscricao_estadual' => 'Inscrição estadual',
+        'fiscal.crt' => 'CRT/regime tributário',
+        'fiscal.serie_nfe' => 'Série da NF-e',
+        'fiscal.proximo_numero_nfe' => 'Próximo número da NF-e',
+        'fiscal.codigo_municipio' => 'Código IBGE do município',
         'fiscal.endereco_logradouro' => 'Logradouro do emitente',
-        'fiscal.endereco_numero' => 'Numero do endereco do emitente',
+        'fiscal.endereco_numero' => 'Número do endereço do emitente',
         'fiscal.endereco_bairro' => 'Bairro do emitente',
-        'fiscal.endereco_municipio' => 'Municipio do emitente',
+        'fiscal.endereco_municipio' => 'Município do emitente',
         'fiscal.endereco_cep' => 'CEP do emitente',
         'fiscal.certificado_pfx' => 'Certificado A1/PFX',
         'fiscal.certificado_senha' => 'Senha do certificado',
@@ -52,17 +52,17 @@ function nfe_validate_order(int $pedidoId): array
 
     foreach ($requiredConfig as $key => $label) {
         if (trim((string) app_config($key, '')) === '') {
-            return ['ok' => false, 'message' => 'Configuracao fiscal pendente: ' . $label . '.'];
+            return ['ok' => false, 'message' => 'Configuração fiscal pendente: ' . $label . '.'];
         }
     }
 
     $certificate = trim((string) app_config('fiscal.certificado_pfx', ''));
     if ($certificate !== '' && !is_file($certificate)) {
-        return ['ok' => false, 'message' => 'Certificado A1/PFX nao encontrado no caminho configurado.'];
+        return ['ok' => false, 'message' => 'Certificado A1/PFX não encontrado no caminho configurado.'];
     }
 
     if (empty($pedido['documento'])) {
-        return ['ok' => false, 'message' => 'Cliente sem CPF/CNPJ para emissao fiscal.'];
+        return ['ok' => false, 'message' => 'Cliente sem CPF/CNPJ para emissão fiscal.'];
     }
 
     $items = db_all(
@@ -84,10 +84,10 @@ function nfe_validate_order(int $pedidoId): array
     }
 
     if (!nfe_sped_available()) {
-        return ['ok' => false, 'message' => 'Biblioteca SPED-NFe nao instalada. Execute composer install.'];
+        return ['ok' => false, 'message' => 'Biblioteca SPED-NFe não instalada. Execute composer install.'];
     }
 
-    return ['ok' => true, 'message' => 'Pedido validado para emissao de NF-e.'];
+    return ['ok' => true, 'message' => 'Pedido validado para emissão de NF-e.'];
 }
 
 function produto_fiscal_issues(array $produto): array

@@ -51,12 +51,12 @@ require_once __DIR__ . '/includes/header.php';
     <div class="container position-relative">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <span class="afeto-tag"><i class="bi bi-heart-pulse"></i> consultoria materna e pos-parto</span>
+                <span class="afeto-tag"><i class="bi bi-heart-pulse"></i> consultoria materna e pós-parto</span>
                 <h1 class="afeto-title mt-4">
-                    Acolhimento profissional para uma maternidade com <span>mais calma e seguranca</span>.
+                    Acolhimento profissional para uma maternidade com <span>mais calma e segurança</span>.
                 </h1>
                 <p class="afeto-subtitle">
-                    Orientacao humanizada em amamentacao, pos-parto e cuidados com o bebe, com uma curadoria de produtos pensada para apoiar cada fase da sua rotina.
+                    Orientação humanizada em amamentação, pós-parto e cuidados com o bebê, com uma curadoria de produtos pensada para apoiar cada fase da sua rotina.
                 </p>
                 <?php if (!$vendasHabilitadas): ?>
                     <div class="alert alert-warning mb-4"><i class="bi bi-info-circle"></i> <?= e(loja_catalog_message()) ?></div>
@@ -67,8 +67,8 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
                 <div class="afeto-stats">
                     <div><strong>01</strong><span>escuta individual</span></div>
-                    <div><strong>02</strong><span>orientacao pratica</span></div>
-                    <div><strong>03</strong><span>apoio no pos-venda</span></div>
+                    <div><strong>02</strong><span>orientação prática</span></div>
+                    <div><strong>03</strong><span>apoio no pós-venda</span></div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -123,12 +123,12 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             <div class="col-lg-7">
                 <span class="afeto-section-tag">sobre o cuidado</span>
-                <h2>Um atendimento pensado para a mae, o bebe e a rotina real da familia.</h2>
+                <h2>Um atendimento pensado para a mãe, o bebê e a rotina real da família.</h2>
                 <p>
-                    A Colo & Afeto une informacao segura, acolhimento e orientacao pratica para reduzir duvidas em momentos que costumam trazer ansiedade.
+                    A Colo & Afeto une informação segura, acolhimento e orientação prática para reduzir dúvidas em momentos que costumam trazer ansiedade.
                 </p>
                 <p>
-                    Alem do atendimento, voce encontra uma curadoria de itens para amamentacao, pos-parto e cuidados do bebe, com produtos organizados para facilitar a escolha.
+                    Além do atendimento, você encontra uma curadoria de itens para amamentação, pós-parto e cuidados do bebê, com produtos organizados para facilitar a escolha.
                 </p>
                 <div class="afeto-about-metrics">
                     <div><strong>01</strong><span>acolher</span></div>
@@ -167,7 +167,7 @@ require_once __DIR__ . '/includes/header.php';
                     <span>02</span>
                     <div class="service-icon"><i class="bi bi-droplet-half"></i></div>
                     <div class="service-copy">
-                        <h3>Amamentacao e Pos-Parto</h3>
+                        <h3>Amamentação e Pós-Parto</h3>
                         <p>Apoio para pega, conforto e organização do cuidado com o bebê e a recuperação da mãe.</p>
                         <small>amamentação · conforto · rotina</small>
                     </div>
@@ -182,7 +182,7 @@ require_once __DIR__ . '/includes/header.php';
                     <span>03</span>
                     <div class="service-icon"><i class="bi bi-patch-check-fill"></i></div>
                     <div class="service-copy">
-                        <h3>Taping Pos-Parto</h3>
+                        <h3>Taping Pós-Parto</h3>
                         <p>Aplicações seguras para apoio postural, conforto e recuperação do corpo após o parto.</p>
                         <small>suporte · recuperação · bem-estar</small>
                     </div>
@@ -254,12 +254,12 @@ require_once __DIR__ . '/includes/header.php';
         <div class="row align-items-center g-5">
             <div class="col-lg-5">
                 <span class="afeto-section-tag">loja integrada</span>
-                <h2><?= $vendasHabilitadas ? 'Produtos que acompanham a jornada materna.' : 'Catalogo de produtos para conhecer e comparar.' ?></h2>
+                <h2><?= $vendasHabilitadas ? 'Produtos que acompanham a jornada materna.' : 'Catálogo de produtos para conhecer e comparar.' ?></h2>
                 <p>
-                    Veja itens de amamentacao, kits, pos-parto e cuidados do bebe em uma vitrine simples de navegar.
-                    <?= $vendasHabilitadas ? 'Quando escolher, voce pode seguir para o carrinho.' : 'No momento, as vendas online estao pausadas.' ?>
+                    Veja itens de amamentação, kits, pós-parto e cuidados do bebê em uma vitrine simples de navegar.
+                    <?= $vendasHabilitadas ? 'Quando escolher, você pode seguir para o carrinho.' : 'No momento, as vendas online estão pausadas.' ?>
                 </p>
-                <a class="btn btn-brand" href="<?= e(base_url('loja/index.php')) ?>"><i class="bi bi-bag-heart"></i> <?= $vendasHabilitadas ? 'Ver produtos' : 'Ver catalogo' ?></a>
+                <a class="btn btn-brand" href="<?= e(base_url('loja/index.php')) ?>"><i class="bi bi-bag-heart"></i> <?= $vendasHabilitadas ? 'Ver produtos' : 'Ver catálogo' ?></a>
             </div>
             <div class="col-lg-7">
                 <div class="row g-3">
@@ -277,7 +277,7 @@ require_once __DIR__ . '/includes/header.php';
                                     <i class="bi bi-gift"></i>
                                 <?php endif; ?>
                                 <span><?= e($produto['nome']) ?></span>
-                                <strong><?= $vendasHabilitadas ? money_br($preco) : 'Catalogo' ?></strong>
+                                <strong><?= $vendasHabilitadas ? money_br($preco) : 'Catálogo' ?></strong>
                             </a>
                         </div>
                     <?php endforeach; ?>
@@ -291,21 +291,21 @@ require_once __DIR__ . '/includes/header.php';
     <div class="container">
         <div class="text-center mb-5">
             <span class="afeto-section-tag">depoimentos</span>
-            <h2>Quando a orientacao chega, a rotina respira.</h2>
+            <h2>Quando a orientação chega, a rotina respira.</h2>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
                 <article class="afeto-testimonial h-100">
                     <div class="afeto-stars">★★★★★</div>
                     <p>"Me senti ouvida e orientada em cada detalhe. O atendimento trouxe calma."</p>
-                    <strong>Cliente pos-parto</strong>
+                    <strong>Cliente pós-parto</strong>
                 </article>
             </div>
             <div class="col-md-4">
                 <article class="afeto-testimonial h-100 featured">
                     <div class="afeto-stars">★★★★★</div>
                     <p>"A curadoria dos produtos ajuda muito porque faz sentido para a fase que estou vivendo."</p>
-                    <strong>Mae de primeira viagem</strong>
+                    <strong>Mãe de primeira viagem</strong>
                 </article>
             </div>
             <div class="col-md-4">
@@ -324,7 +324,7 @@ require_once __DIR__ . '/includes/header.php';
         <div class="afeto-cta-box">
             <span class="afeto-section-tag">vamos conversar</span>
             <h2>Pronta para receber<br><em>cuidado de verdade?</em></h2>
-            <p>Entre em contato e agende seu atendimento. A Colo & Afeto existe para caminhar com voce nessa fase tao especial da vida.</p>
+            <p>Entre em contato e agende seu atendimento. A Colo & Afeto existe para caminhar com você nessa fase tão especial da vida.</p>
             <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
                 <a class="btn btn-brand btn-lg" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> Falar pelo WhatsApp</a>
                 <a href="https://instagram.com" class="btn btn-outline-brand btn-lg" target="_blank"><i class="bi bi-instagram"></i> Ver no Instagram</a>

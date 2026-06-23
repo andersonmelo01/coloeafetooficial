@@ -9,18 +9,18 @@
                     <span>Colo & Afeto</span>
                 </a>
                 <p class="footer-copy">
-                    Acolhimento, orientacao materna e curadoria de produtos para amamentacao, pos-parto e cuidados com o bebe.
+                    Acolhimento, orientação materna e curadoria de produtos para amamentação, pós-parto e cuidados com o bebê.
                 </p>
                 <?php if (!loja_vendas_enabled()): ?>
-                    <div class="footer-status"><i class="bi bi-info-circle"></i> Loja em modo catalogo</div>
+                    <div class="footer-status"><i class="bi bi-info-circle"></i> Loja em modo catálogo</div>
                 <?php endif; ?>
             </div>
             <div class="col-6 col-lg-2">
                 <h2>Atalhos</h2>
                 <a href="<?= e(base_url('home.php#sobre')) ?>">Sobre</a>
-                <a href="<?= e(base_url('home.php#servicos')) ?>">Servicos</a>
-                <a href="<?= e(base_url('loja/index.php')) ?>"><?= loja_vendas_enabled() ? 'Loja' : 'Catalogo' ?></a>
-                <a href="<?= e(base_url('cliente/index.php')) ?>">Area do cliente</a>
+                <a href="<?= e(base_url('home.php#servicos')) ?>">Serviços</a>
+                <a href="<?= e(base_url('loja/index.php')) ?>"><?= loja_vendas_enabled() ? 'Loja' : 'Catálogo' ?></a>
+                <a href="<?= e(base_url('cliente/index.php')) ?>">Área do cliente</a>
             </div>
             <div class="col-6 col-lg-2">
                 <h2>Atendimento</h2>
@@ -42,6 +42,41 @@
         </div>
     </div>
 </footer>
+
+<?php
+$footerUser = current_user();
+$footerTipo = $footerUser['tipo'] ?? '';
+$showMobileTabs = !in_array($footerTipo, ['admin', 'entregador'], true);
+$footerScript = (string) ($_SERVER['SCRIPT_NAME'] ?? '');
+$footerCartActive = strpos($footerScript, '/carrinho/') !== false || strpos($footerScript, '/checkout/') !== false;
+?>
+<?php if ($showMobileTabs): ?>
+    <nav class="mobile-tabbar" aria-label="Navegação principal no celular">
+        <a class="<?= ($active ?? '') === 'home' ? 'active' : '' ?>" href="<?= e(base_url('home.php')) ?>">
+            <i class="bi bi-house-heart"></i>
+            <span>Início</span>
+        </a>
+        <a class="<?= ($active ?? '') === 'loja' ? 'active' : '' ?>" href="<?= e(base_url('loja/index.php')) ?>">
+            <i class="bi bi-bag-heart"></i>
+            <span>Loja</span>
+        </a>
+        <a class="<?= ($active ?? '') === 'cliente' ? 'active' : '' ?>" href="<?= e(base_url($footerUser ? 'cliente/index.php' : 'auth/login.php')) ?>">
+            <i class="bi bi-person-heart"></i>
+            <span><?= $footerUser ? 'Cliente' : 'Entrar' ?></span>
+        </a>
+        <a class="<?= $footerCartActive ? 'active' : '' ?>" href="<?= e(base_url('carrinho/index.php')) ?>">
+            <span class="mobile-tabbar-cart">
+                <i class="bi bi-cart3"></i>
+                <?php if (cart_count() > 0): ?><em><?= cart_count() ?></em><?php endif; ?>
+            </span>
+            <span>Carrinho</span>
+        </a>
+        <a href="https://wa.me/5521986518591" target="_blank" rel="noopener">
+            <i class="bi bi-whatsapp"></i>
+            <span>WhatsApp</span>
+        </a>
+    </nav>
+<?php endif; ?>
 
 <div class="chat-widget chat-closed" id="afetoChatWidget">
     <button type="button" class="chat-toggle" id="afetoChatToggle" aria-expanded="false" aria-controls="afetoChatPanel">
@@ -69,7 +104,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="<?= e(asset_url('bootstrap/js/bootstrap.bundle.min.js')) ?>"></script>
 <script src="<?= e(asset_url('js/app.js')) ?>"></script>
 </body>
 </html>

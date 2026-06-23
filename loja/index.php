@@ -62,8 +62,8 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
         <div class="row align-items-end g-4">
             <div class="col-lg-7">
                 <p class="eyebrow">Loja virtual</p>
-                <h1 class="display-5 section-title mb-3">Produtos selecionados para maternidade e bebe.</h1>
-                <p class="text-secondary mb-0">Catalogo preparado para produtos, categorias, grupos, estoque, checkout e pedidos.</p>
+                <h1 class="display-5 section-title mb-3">Produtos selecionados para maternidade e bebê.</h1>
+                <p class="text-secondary mb-0">Catálogo preparado para produtos, categorias, grupos, estoque, checkout e pedidos.</p>
                 <?php if (!$vendasHabilitadas): ?><div class="alert alert-warning mt-4 mb-0"><i class="bi bi-info-circle"></i> <?= e(loja_catalog_message()) ?></div><?php endif; ?>
             </div>
             <div class="col-lg-5">
@@ -82,7 +82,7 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
 
 <section class="py-4">
     <div class="container">
-        <div class="d-flex flex-wrap gap-2 mb-4">
+        <div class="product-filter-row d-flex flex-wrap gap-2 mb-4">
             <a class="btn btn-sm <?= $categoria === '' ? 'btn-brand' : 'btn-outline-brand' ?>" href="<?= e(base_url('loja/index.php' . $queryTodos)) ?>">Todos</a>
             <?php foreach ($categorias as $cat): ?>
                 <?php $catQuery = '?' . http_build_query(array_filter(['q' => $busca, 'categoria' => $cat['slug']])); ?>
@@ -117,7 +117,7 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
                             <?php if (!empty($produto['promo_titulo'])): ?><div class="small fw-bold text-danger mb-1"><?= e($produto['promo_titulo']) ?></div><?php endif; ?>
                             <h2 class="h5"><a class="text-decoration-none text-reset" href="<?= e(base_url('loja/produto.php?slug=' . urlencode((string) ($produto['slug'] ?? '')))) ?>"><?= e($produto['nome']) ?></a></h2>
                             <p class="text-secondary small"><?= e($produto['descricao_curta'] ?? '') ?></p>
-                            <div class="d-flex align-items-center justify-content-between gap-3">
+                            <div class="product-card-actions d-flex align-items-center justify-content-between gap-3">
                                 <div>
                                     <?php if ($preco < (float) $produto['preco']): ?>
                                         <div class="small text-decoration-line-through text-secondary"><?= money_br((float) $produto['preco']) ?></div>
@@ -137,7 +137,7 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
                                         </button>
                                     </form>
                                 <?php else: ?>
-                                    <span class="badge text-bg-light">Catalogo</span>
+                                    <span class="badge text-bg-light">Catálogo</span>
                                 <?php endif; ?>
                             </div>
                             <a class="btn btn-sm btn-outline-brand w-100 mt-3" href="<?= e(base_url('loja/produto.php?slug=' . urlencode((string) ($produto['slug'] ?? '')))) ?>"><i class="bi bi-eye"></i> Ver detalhes</a>

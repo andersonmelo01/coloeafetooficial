@@ -21,7 +21,7 @@ if (efi_pix_enabled()) {
     $paymentOptions = ['pix_qrcode' => 'PIX com QR Code Efi Bank'] + $paymentOptions;
 }
 if (efi_card_enabled()) {
-    $paymentOptions = ['cartao_credito' => 'Cartao de credito Efi Bank'] + $paymentOptions;
+    $paymentOptions = ['cartao_credito' => 'Cartão de crédito Efi Bank'] + $paymentOptions;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -85,13 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->commit();
         $_SESSION['carrinho'] = [];
         pedido_send_confirmation_email($pedidoId);
-        flash('success', 'Pedido recebido. Ele sera revisado pelo gestor antes da confirmacao final.');
+        flash('success', 'Pedido recebido. Ele será revisado pelo gestor antes da confirmação final.');
         redirect('cliente/pedidos.php');
     } catch (Throwable $e) {
         if (isset($pdo) && $pdo->inTransaction()) {
             $pdo->rollBack();
         }
-        flash('danger', 'Nao foi possivel finalizar. Verifique o banco de dados.');
+        flash('danger', 'Não foi possível finalizar. Verifique o banco de dados.');
         redirect('checkout/index.php');
     }
 }
@@ -107,13 +107,13 @@ require_once dirname(__DIR__) . '/includes/header.php';
             <div class="col-lg-8">
                 <div class="panel-card bg-white p-4">
                     <h1 class="h3 section-title">Checkout</h1>
-                    <p class="text-secondary">Confirme os dados de entrega e escolha a forma de pagamento. O pedido entra como novo e sera confirmado pelo gestor apos revisao.</p>
+                    <p class="text-secondary">Confirme os dados de entrega e escolha a forma de pagamento. O pedido entra como novo e será confirmado pelo gestor após revisão.</p>
                     <form method="post">
                         <?= csrf_field() ?>
                         <div class="mb-4 p-3 bg-light rounded-2">
-                            <strong>Endereco principal</strong>
+                            <strong>Endereço principal</strong>
                             <p class="mb-0 text-secondary">
-                                <?= $endereco ? e($endereco['logradouro'] . ', ' . $endereco['numero'] . ' - ' . $endereco['cidade'] . '/' . $endereco['uf']) : 'Nenhum endereco encontrado no cadastro.' ?>
+                                <?= $endereco ? e($endereco['logradouro'] . ', ' . $endereco['numero'] . ' - ' . $endereco['cidade'] . '/' . $endereco['uf']) : 'Nenhum endereço encontrado no cadastro.' ?>
                             </p>
                         </div>
                         <div class="mb-3">
@@ -125,10 +125,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
                             </select>
                         </div>
                         <div class="mb-3" id="cardTokenBox" style="display:none">
-                            <label class="form-label">Payment token do cartao</label>
+                            <label class="form-label">Payment token do cartão</label>
                             <input class="form-control" name="payment_token" placeholder="Gerado pela biblioteca JS da Efi com o payee_code">
                             <input type="hidden" name="card_mask" value="">
-                            <div class="form-text">Em producao, o token deve ser gerado no navegador com o Identificador de conta/payee_code da Efi. O sistema nao deve armazenar numero de cartao.</div>
+                            <div class="form-text">Em produção, o token deve ser gerado no navegador com o Identificador de conta/payee_code da Efi. O sistema não deve armazenar número de cartão.</div>
                         </div>
                         <button class="btn btn-brand" type="submit">Confirmar pedido</button>
                     </form>

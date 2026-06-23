@@ -35,7 +35,7 @@ $produto = db_one(
 );
 
 if (!$produto) {
-    flash('warning', 'Produto nao encontrado.');
+    flash('warning', 'Produto não encontrado.');
     redirect('loja/index.php');
 }
 
@@ -75,7 +75,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#produtoCarousel" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Proxima</span>
+                                <span class="visually-hidden">Próxima</span>
                             </button>
                         <?php endif; ?>
                     </div>
@@ -89,8 +89,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
                 <div class="d-flex flex-wrap gap-2 mb-3">
                     <span class="badge text-bg-light"><?= e($produto['categoria'] ?: 'Categoria') ?></span>
                     <span class="badge text-bg-warning"><?= e($produto['grupo'] ?: 'Grupo') ?></span>
-                    <?php if ($temPromocao): ?><span class="badge text-bg-danger"><i class="bi bi-megaphone"></i> Promocao</span><?php endif; ?>
-                    <?php if (!$vendasHabilitadas): ?><span class="badge text-bg-secondary">Catalogo</span><?php endif; ?>
+                    <?php if ($temPromocao): ?><span class="badge text-bg-danger"><i class="bi bi-megaphone"></i> Promoção</span><?php endif; ?>
+                    <?php if (!$vendasHabilitadas): ?><span class="badge text-bg-secondary">Catálogo</span><?php endif; ?>
                 </div>
                 <?php if (!$vendasHabilitadas): ?><div class="alert alert-warning"><i class="bi bi-info-circle"></i> <?= e(loja_catalog_message()) ?></div><?php endif; ?>
                 <?php if (!empty($produto['promo_titulo'])): ?><div class="fw-bold text-danger mb-2"><?= e($produto['promo_titulo']) ?></div><?php endif; ?>
@@ -101,11 +101,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
                         <div class="text-secondary text-decoration-line-through"><?= money_br((float) $produto['preco']) ?></div>
                     <?php endif; ?>
                     <strong class="display-6 text-danger"><?= money_br($preco) ?></strong>
-                    <div class="small text-secondary mt-1">Estoque disponivel: <?= $estoque ?></div>
+                    <div class="small text-secondary mt-1">Estoque disponível: <?= $estoque ?></div>
                 </div>
                 <?php if (!empty($produto['descricao'])): ?>
                     <div class="border-top border-bottom py-4 mb-4">
-                        <h2 class="h5">Descricao</h2>
+                        <h2 class="h5">Descrição</h2>
                         <p class="mb-0 text-secondary"><?= nl2br(e($produto['descricao'])) ?></p>
                     </div>
                 <?php endif; ?>

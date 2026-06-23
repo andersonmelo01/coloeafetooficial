@@ -68,6 +68,7 @@ function database_schema_exists(): bool
         'chamados_mensagens',
         'configuracoes',
         'promocoes',
+        'servico_galeria',
         'faturamento_eventos',
         'webhook_eventos',
         'emails_envios',
@@ -93,12 +94,12 @@ function ensure_database_schema(): void
     if (!$exists) {
         $schemaPath = __DIR__ . '/database/schema.sql';
         if (!is_file($schemaPath)) {
-            throw new RuntimeException('Arquivo database/schema.sql nao encontrado.');
+            throw new RuntimeException('Arquivo database/schema.sql não encontrado.');
         }
 
         $sql = file_get_contents($schemaPath);
         if ($sql === false) {
-            throw new RuntimeException('Nao foi possivel ler database/schema.sql.');
+            throw new RuntimeException('Não foi possível ler database/schema.sql.');
         }
 
         $statements = array_filter(array_map('trim', explode(';', $sql)));
@@ -161,6 +162,21 @@ function ensure_application_migrations(): void
             destaque TINYINT(1) NOT NULL DEFAULT 1,
             criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (produto_id) REFERENCES produtos(id)
+        )"
+    );
+
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS servico_galeria (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            servico_slug VARCHAR(120) NOT NULL,
+            titulo VARCHAR(160) NOT NULL,
+            descricao VARCHAR(255) NULL,
+            caminho VARCHAR(255) NOT NULL,
+            ordem INT NOT NULL DEFAULT 0,
+            ativo TINYINT(1) NOT NULL DEFAULT 1,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX idx_servico_galeria_slug (servico_slug)
         )"
     );
 
@@ -243,7 +259,7 @@ function ensure_application_migrations(): void
     try {
         $pdo->exec("ALTER TABLE usuarios MODIFY tipo ENUM('admin', 'cliente', 'entregador') NOT NULL DEFAULT 'cliente'");
     } catch (Throwable $e) {
-        // Mantem compatibilidade em ambientes onde o usuario do banco nao pode alterar ENUM.
+        // Mantém compatibilidade em ambientes onde o usuário do banco não pode alterar ENUM.
     }
 
     if (!column_exists('usuarios', 'perfil_admin_id')) {
@@ -356,7 +372,7 @@ function ensure_application_migrations(): void
     try {
         $pdo->exec("ALTER TABLE notas_fiscais MODIFY status ENUM('pendente', 'transmitida', 'autorizada', 'cancelada', 'rejeitada', 'corrigida') NOT NULL DEFAULT 'pendente'");
     } catch (Throwable $e) {
-        // Mantem a instalacao funcionando mesmo em bases com restricao para alterar ENUM.
+        // Mantém a instalação funcionando mesmo em bases com restrição para alterar ENUM.
     }
 
     if (!column_exists('chamados', 'protocolo')) {
@@ -421,7 +437,7 @@ function ensure_application_migrations(): void
         ['efi.webhook_token', bin2hex(random_bytes(16)), 'pagamento'],
         ['efi.webhook_url', '', 'pagamento'],
         ['loja.vendas_habilitadas', '1', 'loja'],
-        ['loja.mensagem_catalogo', 'A loja esta temporariamente funcionando como catalogo. As vendas online estao pausadas, mas os produtos podem ser visualizados normalmente.', 'loja'],
+        ['loja.mensagem_catalogo', 'A loja está temporariamente funcionando como catálogo. As vendas online estão pausadas, mas os produtos podem ser visualizados normalmente.', 'loja'],
         ['email.habilitado', '0', 'email'],
         ['email.smtp_host', '', 'email'],
         ['email.smtp_port', '587', 'email'],

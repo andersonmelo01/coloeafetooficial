@@ -5,7 +5,7 @@ require_login('admin');
 $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $promo = db_one("SELECT * FROM promocoes WHERE id = :id", ['id' => $id]);
 if (!$promo) {
-    flash('danger', 'Promocao nao encontrada.');
+    flash('danger', 'Promoção não encontrada.');
     redirect('admin/promocoes/index.php');
 }
 
@@ -28,24 +28,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'ativo' => isset($_POST['ativo']) ? 1 : 0,
         'destaque' => isset($_POST['destaque']) ? 1 : 0,
     ]);
-    flash('success', 'Promocao atualizada.');
+    flash('success', 'Promoção atualizada.');
     redirect('admin/promocoes/index.php');
 }
 
-$pageTitle = 'Editar Promocao';
+$pageTitle = 'Editar Promoção';
 $active = 'admin';
 require_once dirname(__DIR__, 2) . '/includes/header.php';
 ?>
 <section class="py-5"><div class="container"><div class="row g-4"><div class="col-lg-3"><?php require dirname(__DIR__) . '/menu.php'; ?></div><div class="col-lg-9">
     <div class="panel-card bg-white p-4">
-        <h1 class="h3 section-title">Editar promocao</h1>
+        <h1 class="h3 section-title">Editar promoção</h1>
         <form method="post" class="row g-3">
             <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $promo['id'] ?>">
-            <div class="col-12"><label class="form-label">Titulo</label><input class="form-control" name="titulo" value="<?= e($promo['titulo']) ?>" required></div>
-            <div class="col-12"><label class="form-label">Descricao</label><input class="form-control" name="descricao" value="<?= e($promo['descricao']) ?>"></div>
-            <div class="col-md-6"><label class="form-label">Preco promocional</label><input class="form-control" name="preco_promocional" type="number" step="0.01" value="<?= e((string) $promo['preco_promocional']) ?>"></div>
+            <div class="col-12"><label class="form-label">Título</label><input class="form-control" name="titulo" value="<?= e($promo['titulo']) ?>" required></div>
+            <div class="col-12"><label class="form-label">Descrição</label><input class="form-control" name="descricao" value="<?= e($promo['descricao']) ?>"></div>
+            <div class="col-md-6"><label class="form-label">Preço promocional</label><input class="form-control" name="preco_promocional" type="number" step="0.01" value="<?= e((string) $promo['preco_promocional']) ?>"></div>
             <div class="col-md-6"><label class="form-label">% desconto</label><input class="form-control" name="percentual_desconto" type="number" step="0.01" value="<?= e((string) $promo['percentual_desconto']) ?>"></div>
-            <div class="col-md-6"><label class="form-label">Inicio</label><input class="form-control" name="data_inicio" type="date" value="<?= e($promo['data_inicio']) ?>"></div>
+            <div class="col-md-6"><label class="form-label">Início</label><input class="form-control" name="data_inicio" type="date" value="<?= e($promo['data_inicio']) ?>"></div>
             <div class="col-md-6"><label class="form-label">Fim</label><input class="form-control" name="data_fim" type="date" value="<?= e($promo['data_fim']) ?>"></div>
             <div class="col-12"><label class="form-check"><input class="form-check-input" type="checkbox" name="ativo" <?= (int) $promo['ativo'] ? 'checked' : '' ?>> Ativa</label></div>
             <div class="col-12"><label class="form-check"><input class="form-check-input" type="checkbox" name="destaque" <?= (int) $promo['destaque'] ? 'checked' : '' ?>> Destacar na loja</label></div>

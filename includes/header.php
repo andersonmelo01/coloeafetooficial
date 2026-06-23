@@ -8,7 +8,7 @@ $bodyClass = $bodyClass ?? '';
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title><?= e($pageTitle) ?> | Colo e Afeto</title>
     <!--<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">-->
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@ $bodyClass = $bodyClass ?? '';
     <link href="<?= e(asset_url('css/style.css')) ?>" rel="stylesheet">
 </head>
 <body class="<?= e($bodyClass) ?>">
-<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom soft-shadow">
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom soft-shadow site-navbar">
     <div class="container">
         <a class="navbar-brand fw-bold brand-mark d-flex align-items-center" href="<?= e(base_url('home.php')) ?>">
             <img class="brand-logo-img" src="<?= e(base_url('img/logo.jpeg')) ?>" alt="Colo e Afeto">
@@ -26,7 +26,7 @@ $bodyClass = $bodyClass ?? '';
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="mainNav">
+        <div class="collapse navbar-collapse main-nav-panel" id="mainNav">
             <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                 <li class="nav-item"><a class="nav-link <?= $active === 'home' ? 'active' : '' ?>" href="<?= e(base_url('home.php')) ?>">Home</a></li>
                 <?php if ($active === 'home'): ?>

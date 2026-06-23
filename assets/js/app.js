@@ -6,6 +6,21 @@ document.querySelectorAll('[data-confirm]').forEach((el) => {
     });
 });
 
+if (document.querySelector('.mobile-tabbar')) {
+    document.body.classList.add('has-mobile-tabbar');
+}
+
+const mainNav = document.getElementById('mainNav');
+if (mainNav && window.bootstrap) {
+    mainNav.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+            if (window.matchMedia('(max-width: 991.98px)').matches && mainNav.classList.contains('show')) {
+                window.bootstrap.Collapse.getOrCreateInstance(mainNav).hide();
+            }
+        });
+    });
+}
+
 document.querySelectorAll('.js-auto-submit').forEach((el) => {
     el.addEventListener('change', () => el.closest('form')?.submit());
 });

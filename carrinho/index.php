@@ -14,17 +14,17 @@ $vendasHabilitadas = loja_vendas_enabled();
                     <h1 class="h3 section-title mb-4">Meu carrinho</h1>
                     <?php if (!$vendasHabilitadas): ?><div class="alert alert-warning"><i class="bi bi-info-circle"></i> <?= e(loja_catalog_message()) ?></div><?php endif; ?>
                     <?php if (!$items): ?>
-                        <p class="text-secondary">Seu carrinho esta vazio.</p>
+                        <p class="text-secondary">Seu carrinho está vazio.</p>
                         <a class="btn btn-brand" href="<?= e(base_url('loja/index.php')) ?>"><i class="bi bi-search"></i> Buscar produtos</a>
                     <?php else: ?>
                         <form method="post" action="<?= e(base_url('carrinho/atualizar.php')) ?>">
                             <?= csrf_field() ?>
-                            <div class="table-responsive">
+                            <div class="table-responsive mobile-card-table">
                                 <table class="table align-middle">
                                     <thead>
                                         <tr>
                                             <th>Produto</th>
-                                            <th>Preco</th>
+                                            <th>Preço</th>
                                             <th style="width: 130px;">Quantidade</th>
                                             <th class="text-end">Subtotal</th>
                                             <th></th>
@@ -33,11 +33,11 @@ $vendasHabilitadas = loja_vendas_enabled();
                                     <tbody>
                                         <?php foreach ($items as $item): ?>
                                             <tr>
-                                                <td><?= e($item['nome']) ?></td>
-                                                <td><?= money_br((float) $item['preco']) ?></td>
-                                                <td><input class="form-control" type="number" min="0" name="quantidades[<?= (int) $item['id'] ?>]" value="<?= (int) $item['quantidade'] ?>"></td>
-                                                <td class="text-end"><?= money_br((float) $item['preco'] * (int) $item['quantidade']) ?></td>
-                                                <td>
+                                                <td class="mobile-card-title"><?= e($item['nome']) ?></td>
+                                                <td data-label="Preço"><?= money_br((float) $item['preco']) ?></td>
+                                                <td data-label="Quantidade"><input class="form-control" type="number" min="0" name="quantidades[<?= (int) $item['id'] ?>]" value="<?= (int) $item['quantidade'] ?>"></td>
+                                                <td class="text-end" data-label="Subtotal"><?= money_br((float) $item['preco'] * (int) $item['quantidade']) ?></td>
+                                                <td class="mobile-card-actions">
                                                     <button class="btn btn-sm btn-outline-danger" form="remove-<?= (int) $item['id'] ?>" data-confirm="Remover este item?"><i class="bi bi-trash"></i></button>
                                                 </td>
                                             </tr>
@@ -45,8 +45,10 @@ $vendasHabilitadas = loja_vendas_enabled();
                                     </tbody>
                                 </table>
                             </div>
-                            <button class="btn btn-outline-brand" type="submit"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>
-                            <?php if ($vendasHabilitadas): ?><a class="btn btn-brand" href="<?= e(base_url('checkout/index.php')) ?>"><i class="bi bi-credit-card"></i> Finalizar compra</a><?php endif; ?>
+                            <div class="d-grid d-sm-flex gap-2">
+                                <button class="btn btn-outline-brand" type="submit"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>
+                                <?php if ($vendasHabilitadas): ?><a class="btn btn-brand" href="<?= e(base_url('checkout/index.php')) ?>"><i class="bi bi-credit-card"></i> Finalizar compra</a><?php endif; ?>
+                            </div>
                         </form>
                         <?php foreach ($items as $item): ?>
                             <form id="remove-<?= (int) $item['id'] ?>" method="post" action="<?= e(base_url('carrinho/remover.php')) ?>" class="d-none">

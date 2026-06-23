@@ -303,6 +303,19 @@ CREATE TABLE IF NOT EXISTS promocoes (
   FOREIGN KEY (produto_id) REFERENCES produtos(id)
 );
 
+CREATE TABLE IF NOT EXISTS servico_galeria (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  servico_slug VARCHAR(120) NOT NULL,
+  titulo VARCHAR(160) NOT NULL,
+  descricao VARCHAR(255) NULL,
+  caminho VARCHAR(255) NOT NULL,
+  ordem INT NOT NULL DEFAULT 0,
+  ativo TINYINT(1) NOT NULL DEFAULT 1,
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_servico_galeria_slug (servico_slug)
+);
+
 CREATE TABLE IF NOT EXISTS faturamento_eventos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   pedido_id INT NOT NULL,
@@ -345,20 +358,20 @@ VALUES ('Administrador', 'Acesso total ao sistema.', 1, 1)
 ON DUPLICATE KEY UPDATE nome = nome;
 
 INSERT INTO categorias (nome, slug, descricao) VALUES
-('Amamentacao', 'amamentacao', 'Produtos para a jornada de amamentacao.'),
-('Bebe', 'bebe', 'Produtos para cuidados com o bebe.'),
-('Pos-parto', 'pos-parto', 'Produtos para recuperacao e conforto no pos-parto.')
+('Amamentação', 'amamentacao', 'Produtos para a jornada de amamentação.'),
+('Bebê', 'bebe', 'Produtos para cuidados com o bebê.'),
+('Pós-parto', 'pos-parto', 'Produtos para recuperação e conforto no pós-parto.')
 ON DUPLICATE KEY UPDATE nome = VALUES(nome);
 
 INSERT INTO grupos_produtos (nome, slug, descricao) VALUES
 ('Kits', 'kits', 'Combos e kits especiais.'),
-('Produtos fisicos', 'produtos-fisicos', 'Produtos individuais para venda e entrega.')
+('Produtos físicos', 'produtos-fisicos', 'Produtos individuais para venda e entrega.')
 ON DUPLICATE KEY UPDATE nome = VALUES(nome);
 
 INSERT INTO produtos
 (categoria_id, grupo_id, nome, slug, sku, descricao_curta, descricao, ncm, cfop, unidade, peso_kg, altura_cm, largura_cm, comprimento_cm, preco, preco_promocional, custo, estoque, ativo, destaque)
-SELECT c.id, g.id, 'Kit Amamentacao Tranquila', 'kit-amamentacao-tranquila', 'KIT-AMAM-001',
-'Almofada, coletor e protetores para uma rotina mais leve.', 'Kit especial para apoio durante a amamentacao.', '63079090', '5102', 'UN', 1.200, 18, 35, 45, 199.90, 179.90, 95.00, 12, 1, 1
+SELECT c.id, g.id, 'Kit Amamentação Tranquila', 'kit-amamentacao-tranquila', 'KIT-AMAM-001',
+'Almofada, coletor e protetores para uma rotina mais leve.', 'Kit especial para apoio durante a amamentação.', '63079090', '5102', 'UN', 1.200, 18, 35, 45, 199.90, 179.90, 95.00, 12, 1, 1
 FROM categorias c, grupos_produtos g
 WHERE c.slug = 'amamentacao' AND g.slug = 'kits'
 ON DUPLICATE KEY UPDATE nome = VALUES(nome);
@@ -396,7 +409,7 @@ INSERT INTO configuracoes (chave, valor, grupo) VALUES
 ('efi.webhook_token', '', 'pagamento'),
 ('efi.webhook_url', '', 'pagamento'),
 ('loja.vendas_habilitadas', '1', 'loja'),
-('loja.mensagem_catalogo', 'A loja esta temporariamente funcionando como catalogo. As vendas online estao pausadas, mas os produtos podem ser visualizados normalmente.', 'loja'),
+('loja.mensagem_catalogo', 'A loja está temporariamente funcionando como catálogo. As vendas online estão pausadas, mas os produtos podem ser visualizados normalmente.', 'loja'),
 ('email.habilitado', '0', 'email'),
 ('email.smtp_host', '', 'email'),
 ('email.smtp_port', '587', 'email'),

@@ -21,8 +21,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
             <h1 class="h3 section-title mb-0">Notas fiscais</h1>
             <form class="search-control" method="get"><div class="input-group"><span class="input-group-text"><i class="bi bi-search"></i></span><input class="form-control" name="q" value="<?= e($q) ?>" placeholder="Numero ou chave"><button class="btn btn-brand">Buscar</button></div></form>
         </div>
-        <div class="table-responsive"><table class="table align-middle"><thead><tr><th>NF-e</th><th>Pedido</th><th>Status</th><th>Emissao</th><th></th></tr></thead><tbody>
-            <?php foreach ($notas as $nota): ?><tr><td><?= e($nota['numero']) ?></td><td>#<?= (int) $nota['pedido_id'] ?></td><td><?= e($nota['status']) ?></td><td><?= e($nota['emitida_em']) ?></td><td><a class="btn btn-sm btn-outline-brand" href="<?= e($nota['xml_url'] ?: '#') ?>"><i class="bi bi-download"></i> XML</a></td></tr><?php endforeach; ?>
+        <div class="table-responsive mobile-card-table"><table class="table align-middle"><thead><tr><th>NF-e</th><th>Pedido</th><th>Status</th><th>Emissao</th><th></th></tr></thead><tbody>
+            <?php foreach ($notas as $nota): ?><tr><td class="mobile-card-title"><?= e($nota['numero']) ?></td><td data-label="Pedido">#<?= (int) $nota['pedido_id'] ?></td><td data-label="Status"><?= e($nota['status']) ?></td><td data-label="Emissao"><?= e($nota['emitida_em']) ?></td><td class="mobile-card-actions"><a class="btn btn-sm btn-outline-brand" href="<?= e($nota['xml_url'] ?: '#') ?>"><i class="bi bi-download"></i> XML</a></td></tr><?php endforeach; ?>
         </tbody></table></div>
         <?php if (!$notas): ?><p class="text-secondary mb-0">Nenhuma NF-e encontrada.</p><?php endif; ?>
         <?= pagination_links($notasPage) ?>

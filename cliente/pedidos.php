@@ -28,8 +28,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
                 <div class="input-group"><span class="input-group-text"><i class="bi bi-search"></i></span><input class="form-control" name="q" value="<?= e($q) ?>" placeholder="Pedido ou status"><button class="btn btn-brand">Buscar</button></div>
             </form>
         </div>
-        <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Pedido</th><th>Status</th><th>Pagamento</th><th>Total</th><th>Data</th></tr></thead><tbody>
-            <?php foreach ($pedidos as $pedido): ?><tr><td>#<?= (int) $pedido['id'] ?></td><td><span class="badge text-bg-light"><?= e($statusLabels[$pedido['status']] ?? $pedido['status']) ?></span></td><td><?= e($pedido['forma_pagamento']) ?></td><td><?= money_br((float) $pedido['total']) ?></td><td><?= e($pedido['criado_em']) ?></td></tr><?php endforeach; ?>
+        <div class="table-responsive mobile-card-table"><table class="table align-middle"><thead><tr><th>Pedido</th><th>Status</th><th>Pagamento</th><th>Total</th><th>Data</th></tr></thead><tbody>
+            <?php foreach ($pedidos as $pedido): ?><tr><td class="mobile-card-title">#<?= (int) $pedido['id'] ?></td><td data-label="Status"><span class="badge text-bg-light"><?= e($statusLabels[$pedido['status']] ?? $pedido['status']) ?></span></td><td data-label="Pagamento"><?= e($pedido['forma_pagamento']) ?></td><td data-label="Total"><?= money_br((float) $pedido['total']) ?></td><td data-label="Data"><?= e($pedido['criado_em']) ?></td></tr><?php endforeach; ?>
         </tbody></table></div>
         <?php if (!$pedidos): ?><p class="text-secondary mb-0">Nenhum pedido localizado.</p><?php endif; ?>
         <?= pagination_links($pedidosPage) ?>

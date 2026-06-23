@@ -32,12 +32,17 @@ require_once dirname(__DIR__) . '/includes/header.php';
                     <?php if (!$pedidos): ?>
                         <p class="text-secondary mb-0">Nenhum pedido encontrado.</p>
                     <?php else: ?>
-                        <div class="table-responsive">
+                        <div class="table-responsive mobile-card-table">
                             <table class="table align-middle">
                                 <thead><tr><th>Pedido</th><th>Status</th><th>Total</th><th>Data</th></tr></thead>
                                 <tbody>
                                     <?php foreach ($pedidos as $pedido): ?>
-                                        <tr><td>#<?= (int) $pedido['id'] ?></td><td><?= e($pedido['status']) ?></td><td><?= money_br((float) $pedido['total']) ?></td><td><?= e($pedido['criado_em']) ?></td></tr>
+                                        <tr>
+                                            <td class="mobile-card-title">#<?= (int) $pedido['id'] ?></td>
+                                            <td data-label="Status"><?= e($pedido['status']) ?></td>
+                                            <td data-label="Total"><?= money_br((float) $pedido['total']) ?></td>
+                                            <td data-label="Data"><?= e($pedido['criado_em']) ?></td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
