@@ -219,7 +219,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div class="afeto-service-actions">
                         <a class="btn btn-brand btn-sm" href="<?= e(base_url('servico.php?slug=doula')) ?>">Mais detalhes</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5522988441463" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5521986518591" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
                     </div>
                 </article>
             </div>
@@ -227,7 +227,7 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<section class="afeto-section afeto-parceiros" id="parceiros">
+<!--<section class="afeto-section afeto-parceiros" id="parceiros">
     <div class="container">
         <div class="text-center mb-5">
             <span class="afeto-section-tag">Parceiros(as)</span>
@@ -248,7 +248,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         </div>
     </div>
-</section>
+</section>-->
 
 <section class="afeto-section afeto-shop-preview">
     <div class="container">
