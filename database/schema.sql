@@ -410,6 +410,7 @@ INSERT INTO configuracoes (chave, valor, grupo) VALUES
 ('efi.webhook_url', '', 'pagamento'),
 ('loja.vendas_habilitadas', '1', 'loja'),
 ('loja.mensagem_catalogo', 'A loja está temporariamente funcionando como catálogo. As vendas online estão pausadas, mas os produtos podem ser visualizados normalmente.', 'loja'),
+('parceiros.habilitados', '0', 'parceiros'),
 ('email.habilitado', '0', 'email'),
 ('email.smtp_host', '', 'email'),
 ('email.smtp_port', '587', 'email'),

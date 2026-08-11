@@ -43,6 +43,8 @@ if (!$homeProdutos) {
     $homeProdutos = sample_products();
 }
 
+$homePartners = partner_catalog();
+
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -227,28 +229,32 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<!--<section class="afeto-section afeto-parceiros" id="parceiros">
-    <div class="container">
-        <div class="text-center mb-5">
-            <span class="afeto-section-tag">Parceiros(as)</span>
-            <h2>Parceiros conveniados e credenciados</h2>
-        </div>
-        <div class="row g-4 align-items-stretch">
-            <div class="col-sm-12 col-md-6 col-lg-4 d-flex">
-                <article class="afeto-testimonial h-100 partner-card w-100">
-                    <h3><a class="partner-name" href="<?= e(base_url('parceiros/milena-santos.php')) ?>">Milena Santos</a></h3>
-                    <div class="afeto-stars">★★★★★</div>
-                    <img src="img/millena_perfil.jpeg" alt="Milena Santos" class="brand-parceiros-img">
-                    <p class="txt_global">Milena atua como doula parceira, oferecendo apoio emocional e prático para gestantes e puérperas.</p>
-                    <div class="partner-actions">
-                        <a class="btn btn-outline-brand btn-sm" href="<?= e(base_url('parceiros/milena-santos.php')) ?>">Ver perfil</a>
-                        <a class="btn btn-whatsapp btn-sm" href="https://wa.me/5522988441463" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+<?php if ($homePartners): ?>
+    <section class="afeto-section afeto-parceiros" id="parceiros">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="afeto-section-tag">Parceiros(as)</span>
+                <h2>Parceiros conveniados e credenciados</h2>
+            </div>
+            <div class="row g-4 align-items-stretch">
+                <?php foreach ($homePartners as $partner): ?>
+                    <div class="col-sm-12 col-md-6 col-lg-4 d-flex">
+                        <article class="afeto-testimonial h-100 partner-card w-100">
+                            <h3><a class="partner-name" href="<?= e($partner['profile_url']) ?>"><?= e($partner['name']) ?></a></h3>
+                            <div class="afeto-stars">★★★★★</div>
+                            <img src="<?= e($partner['image']) ?>" alt="<?= e($partner['name']) ?>" class="brand-parceiros-img">
+                            <p class="txt_global"><?= e($partner['summary']) ?></p>
+                            <div class="partner-actions">
+                                <a class="btn btn-outline-brand btn-sm" href="<?= e($partner['profile_url']) ?>">Ver perfil</a>
+                                <a class="btn btn-whatsapp btn-sm" href="<?= e($partner['whatsapp_url']) ?>" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                            </div>
+                        </article>
                     </div>
-                </article>
+                <?php endforeach; ?>
             </div>
         </div>
-    </div>
-</section>-->
+    </section>
+<?php endif; ?>
 
 <section class="afeto-section afeto-shop-preview">
     <div class="container">

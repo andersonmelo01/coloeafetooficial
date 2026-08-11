@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $groups = [
         'loja.vendas_habilitadas' => 'loja',
         'loja.mensagem_catalogo' => 'loja',
+        'parceiros.habilitados' => 'parceiros',
         'fiscal.habilitado' => 'fiscal',
         'fiscal.ambiente' => 'fiscal',
         'fiscal.uf' => 'fiscal',
@@ -85,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     $_POST['loja_vendas_habilitadas'] = isset($_POST['loja_vendas_habilitadas']) ? '1' : '0';
+    $_POST['parceiros_habilitados'] = isset($_POST['parceiros_habilitados']) ? '1' : '0';
     $_POST['fiscal_habilitado'] = isset($_POST['fiscal_habilitado']) ? '1' : '0';
     $_POST['fiscal_reforma_tributaria_habilitada'] = isset($_POST['fiscal_reforma_tributaria_habilitada']) ? '1' : '0';
     $_POST['efi_habilitado'] = isset($_POST['efi_habilitado']) ? '1' : '0';
@@ -105,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $map = [
         'loja.vendas_habilitadas' => 'loja_vendas_habilitadas',
         'loja.mensagem_catalogo' => 'loja_mensagem_catalogo',
+        'parceiros.habilitados' => 'parceiros_habilitados',
         'fiscal.habilitado' => 'fiscal_habilitado',
         'fiscal.ambiente' => 'fiscal_ambiente',
         'fiscal.uf' => 'fiscal_uf',
@@ -165,6 +168,7 @@ require_once dirname(__DIR__, 2) . '/includes/header.php';
             <?= csrf_field() ?>
             <div class="col-12"><h2 class="h5">Loja virtual</h2><p class="text-secondary small">Controle se a loja realiza vendas online ou funciona apenas como catálogo para visualização dos produtos.</p></div>
             <div class="col-md-4"><label class="form-check"><input class="form-check-input" type="checkbox" name="loja_vendas_habilitadas" <?= loja_vendas_enabled() ? 'checked' : '' ?>> Habilitar vendas na loja</label></div>
+            <div class="col-md-4"><label class="form-check"><input class="form-check-input" type="checkbox" name="parceiros_habilitados" <?= app_config('parceiros.habilitados', '0') === '1' ? 'checked' : '' ?>> Mostrar parceiros no site e no chat</label></div>
             <div class="col-md-8"><label class="form-label">Mensagem quando vendas estiverem desabilitadas</label><textarea class="form-control" name="loja_mensagem_catalogo" rows="3"><?= e(loja_catalog_message()) ?></textarea></div>
 
             <div class="col-12 border-top pt-4"><h2 class="h5">Fiscal / SPED-NFe</h2><p class="text-secondary small">Quando desabilitado, o gestor pode confirmar vendas sem controle fiscal.</p></div>

@@ -124,13 +124,26 @@ const chatPanel = document.getElementById('afetoChatPanel');
 const chatBody = document.getElementById('afetoChatBody');
 const chatInput = document.getElementById('afetoChatInput');
 const chatSend = document.getElementById('afetoChatSend');
+const chatConfigElement = document.getElementById('afetoChatConfig');
 
 if (chatWidget && chatToggle && chatClose && chatPanel && chatBody && chatInput && chatSend) {
+    let chatConfig = {};
+    if (chatConfigElement) {
+        try {
+            chatConfig = JSON.parse(chatConfigElement.textContent || '{}');
+        } catch (error) {
+            chatConfig = {};
+        }
+    }
+
+    const partners = Array.isArray(chatConfig.partners) ? chatConfig.partners : [];
+    const hasPartners = partners.length > 0;
+    const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
     const responses = [
         { matcher: /como funciona.*doula|doula/i, text: 'A nossa doula oferece apoio antes, durante e depois do parto. Ela ajuda com preparação emocional, presença no parto, orientação prática para amamentação e apoio à família no pós-parto. É um acolhimento humano que traz mais segurança e confiança.' },
-        { matcher: /quais serviços|serviços|servicos|o que vocês oferecem|oferecem/i, text: 'Oferecemos atendimento materno, suporte em amamentação e pós-parto, taping pós-parto, cuidados de furinho humanizado e serviço de doula. Também indicamos parceiros confiáveis e temos uma curadoria de produtos para cada fase da maternidade.' },
+        { matcher: /quais serviços|serviços|servicos|o que vocês oferecem|oferecem/i, text: hasPartners ? 'Oferecemos atendimento materno, suporte em amamentação e pós-parto, taping pós-parto, cuidados de furinho humanizado e serviço de doula. Também indicamos parceiros confiáveis e temos uma curadoria de produtos para cada fase da maternidade.' : 'Oferecemos atendimento materno, suporte em amamentação e pós-parto, taping pós-parto, cuidados de furinho humanizado e serviço de doula. Também temos uma curadoria de produtos para cada fase da maternidade.' },
         { matcher: /agendar|agenda|marcar|atendimento/i, text: 'Para agendar, você pode enviar uma mensagem no WhatsApp, falar direto com nossa equipe e escolher o melhor dia e horário. Também ajudamos a definir o serviço mais adequado para sua fase materna.' },
-        { matcher: /milena|parceira|parceiros|parceiro/i, text: 'Milena atua como doula parceira, com atendimento acolhedor e empático. Ela acompanha gestantes e puérperas com suporte emocional, orientação prática e presença humana durante esse momento especial.' },
         { matcher: /amamenta|amamentação|peg a|mama/i, text: 'No apoio à amamentação, trabalhamos para melhorar a pega, reduzir desconfortos e aumentar a segurança da mãe. Também oferecemos orientações sobre rotina, conforto do bebê e suporte à família para o momento de amamentar.' },
         { matcher: /pós-?parto|pos-?parto|recuperação|recuperacao/i, text: 'O pós-parto pode ser um período desafiador. Nosso suporte inclui orientação sobre cuidados do bebê, autocuidado da mãe, organização da rotina e acolhimento emocional para você e sua família.' },
         { matcher: /furinho|umbigo|cuidado.*umbigo/i, text: 'O cuidado com o furinho humanizado é feito com atenção e delicadeza. Orientamos limpeza, sinais de alerta e como deixar esse momento mais tranquilo para mãe e bebê.' },
@@ -139,6 +152,20 @@ if (chatWidget && chatToggle && chatClose && chatPanel && chatBody && chatInput 
         { matcher: /preço|valor|custo|quanto custa/i, text: 'Os valores variam conforme o serviço e o tempo de atendimento. Para uma proposta personalizada, fale conosco pelo WhatsApp e podemos indicar o pacote mais adequado para você.' },
         { matcher: /whatsapp|contato|falar/i, text: 'O melhor caminho para contato imediato é pelo WhatsApp. Lá você pode tirar dúvidas, agendar atendimento ou pedir orientação rápida com nossa equipe materna.' },
     ];
+
+    if (hasPartners) {
+        const partnerKeywords = partners.flatMap((partner) => [
+            'parceir',
+            partner.name || '',
+            ...(Array.isArray(partner.keywords) ? partner.keywords : []),
+        ]).filter(Boolean);
+        const partnerMatcher = new RegExp(partnerKeywords.map(escapeRegExp).join('|'), 'i');
+        const partnerText = partners.map((partner) => {
+            const contact = partner.whatsapp_url ? ' Você também pode falar diretamente pelo WhatsApp informado no perfil.' : '';
+            return `${partner.name} atua como ${partner.role}. ${partner.summary}${contact}`;
+        }).join('\n\n');
+        responses.push({ matcher: partnerMatcher, text: partnerText });
+    }
 
     const appendMessage = (text, type) => {
         const message = document.createElement('div');
@@ -159,18 +186,20 @@ if (chatWidget && chatToggle && chatClose && chatPanel && chatBody && chatInput 
 
     const showPanel = (open) => {
         if (open) {
-            chatWidget.classList.add('open');
+            chatWidget.classList.add('chat-open');
+            chatWidget.classList.remove('chat-closed');
             chatToggle.setAttribute('aria-expanded', 'true');
             chatPanel.setAttribute('aria-hidden', 'false');
             chatInput.focus();
         } else {
-            chatWidget.classList.remove('open');
+            chatWidget.classList.remove('chat-open');
+            chatWidget.classList.add('chat-closed');
             chatToggle.setAttribute('aria-expanded', 'false');
             chatPanel.setAttribute('aria-hidden', 'true');
         }
     };
 
-    chatToggle.addEventListener('click', () => showPanel(!chatWidget.classList.contains('open')));
+    chatToggle.addEventListener('click', () => showPanel(!chatWidget.classList.contains('chat-open')));
     chatClose.addEventListener('click', () => showPanel(false));
 
     const sendChat = () => {

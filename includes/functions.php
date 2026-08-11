@@ -121,6 +121,25 @@ function redirect(string $path): never
     exit;
 }
 
+function partner_catalog(): array
+{
+    if (app_config('parceiros.habilitados', '0') !== '1') {
+        return [];
+    }
+
+    return [
+        [
+            'name' => 'Milena Santos',
+            'role' => 'doula parceira',
+            'summary' => 'Oferece apoio emocional e prático para gestantes e puérperas, com acolhimento antes, durante e depois do parto.',
+            'profile_url' => base_url('parceiros/milena-santos.php'),
+            'whatsapp_url' => 'https://wa.me/5522988441463',
+            'image' => base_url('img/millena_perfil.jpeg'),
+            'keywords' => ['milena', 'milena santos'],
+        ],
+    ];
+}
+
 function csrf_token(): string
 {
     if (empty($_SESSION['_csrf'])) {

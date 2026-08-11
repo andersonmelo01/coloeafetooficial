@@ -3,6 +3,7 @@ require_once __DIR__ . '/functions.php';
 $pageTitle = $pageTitle ?? 'Colo e Afeto';
 $active = $active ?? '';
 $bodyClass = $bodyClass ?? '';
+$headerPartners = partner_catalog();
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -15,6 +16,7 @@ $bodyClass = $bodyClass ?? '';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">-->
     <link rel="stylesheet" href="<?= e(asset_url('bootstrap/css/bootstrap.min.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('bootstrap-icons/bootstrap-icons.css')) ?>">
+    <?php require_once __DIR__ . '/pixel.php'; ?>
     <link href="<?= e(asset_url('css/style.css')) ?>" rel="stylesheet">
 </head>
 <body class="<?= e($bodyClass) ?>">
@@ -34,7 +36,9 @@ $bodyClass = $bodyClass ?? '';
                 <li class="nav-item"><a class="nav-link <?= $active === 'home' ? 'active' : '' ?>" href="<?= e(base_url('home.php')) ?>">Home</a></li>
                 <?php if ($active === 'home'): ?>
                     <li class="nav-item"><a class="nav-link" href="#servicos">Serviços</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#parceiros">Parceiros</a></li>
+                    <?php if ($headerPartners): ?>
+                        <li class="nav-item"><a class="nav-link" href="#parceiros">Parceiros</a></li>
+                    <?php endif; ?>
                 <?php endif; ?>
                 <li class="nav-item"><a class="nav-link <?= $active === 'loja' ? 'active' : '' ?>" href="<?= e(base_url('loja/index.php')) ?>">Loja</a></li>
                 <?php if ((current_user()['tipo'] ?? '') === 'entregador'): ?>

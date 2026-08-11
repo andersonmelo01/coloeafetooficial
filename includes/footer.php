@@ -1,4 +1,8 @@
-<?php require_once __DIR__ . '/functions.php'; ?>
+<?php
+require_once __DIR__ . '/functions.php';
+$footerPartners = partner_catalog();
+$footerChatTopics = $footerPartners ? 'serviços, parceiros e atendimento' : 'serviços e atendimento';
+?>
 </main>
 <footer class="site-footer">
     <div class="container">
@@ -89,13 +93,15 @@ $footerCartActive = strpos($footerScript, '/carrinho/') !== false || strpos($foo
             <button type="button" class="chat-close" id="afetoChatClose" aria-label="Fechar chat">✕</button>
         </div>
         <div class="chat-body" id="afetoChatBody">
-            <div class="chat-message bot">Olá! Eu sou a assistente Colo & Afeto. Posso tirar dúvidas sobre serviços, parceiros e atendimento. Clique em uma pergunta ou escreva o que deseja saber.</div>
+            <div class="chat-message bot">Olá! Eu sou a assistente Colo & Afeto. Posso tirar dúvidas sobre <?= e($footerChatTopics) ?>. Clique em uma pergunta ou escreva o que deseja saber.</div>
         </div>
         <div class="chat-suggestions" id="afetoChatSuggestions">
             <button type="button" class="chat-suggestion">Como funciona a doula?</button>
-            <button type="button" class="chat-suggestion">Quais serviços vocês oferecem?</button>
+            <button type="button" class="chat-suggestion">Quais serviços oferecemos?</button>
             <button type="button" class="chat-suggestion">Como agendar atendimento?</button>
-            <button type="button" class="chat-suggestion">O que a Milena faz?</button>
+            <?php foreach ($footerPartners as $partner): ?>
+                <button type="button" class="chat-suggestion">O que <?= e($partner['name']) ?> faz?</button>
+            <?php endforeach; ?>
         </div>
         <div class="chat-input-area">
             <input type="text" id="afetoChatInput" placeholder="Escreva sua dúvida..." aria-label="Mensagem de chat">
@@ -104,6 +110,9 @@ $footerCartActive = strpos($footerScript, '/carrinho/') !== false || strpos($foo
     </div>
 </div>
 
+<script type="application/json" id="afetoChatConfig">
+<?= json_encode(['partners' => $footerPartners], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>
+</script>
 <script src="<?= e(asset_url('bootstrap/js/bootstrap.bundle.min.js')) ?>"></script>
 <script src="<?= e(asset_url('js/app.js')) ?>"></script>
 </body>
