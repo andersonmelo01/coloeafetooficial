@@ -130,7 +130,7 @@ a{ transition: all .25s ease; }
 /* ---------- Hero ---------- */
 .afeto-hero{
   position: relative;
-  padding: 7.5rem 0 5rem;
+  padding: 3.5rem 0 5rem;
   overflow: hidden;
   background: linear-gradient(180deg, var(--afeto-creme-2) 0%, #fff 100%);
 }
@@ -1043,7 +1043,7 @@ a{ transition: all .25s ease; }
 /* ---------- Responsivo ---------- */
 @media (max-width: 767px){
   .afeto-title{ font-size: 2rem; }
-  .afeto-hero{ padding: 6rem 0 3rem; text-align: left; }
+  .afeto-hero{ padding: 3rem 0 3rem; text-align: left; }
   .afeto-visual{ min-height: 320px; margin-top: 2rem; }
   .afeto-cta-box{ padding: 2.5rem 1.2rem; }
 }
