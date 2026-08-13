@@ -4,6 +4,7 @@ $pageTitle = $pageTitle ?? 'Colo e Afeto';
 $active = $active ?? '';
 $bodyClass = $bodyClass ?? '';
 $headerPartners = partner_catalog();
+$styleVersion = is_file(dirname(__DIR__) . '/assets/css/style.css') ? (string) filemtime(dirname(__DIR__) . '/assets/css/style.css') : '1';
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -17,7 +18,7 @@ $headerPartners = partner_catalog();
     <link rel="stylesheet" href="<?= e(asset_url('bootstrap/css/bootstrap.min.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('bootstrap-icons/bootstrap-icons.css')) ?>">
     <?php require_once __DIR__ . '/pixel.php'; ?>
-    <link href="<?= e(asset_url('css/style.css')) ?>" rel="stylesheet">
+    <link href="<?= e(asset_url('css/style.css') . '?v=' . $styleVersion) ?>" rel="stylesheet">
 </head>
 <body class="<?= e($bodyClass) ?>">
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom soft-shadow site-navbar">

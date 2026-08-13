@@ -1,5 +1,17 @@
 <?php
 declare(strict_types=1);
+/*
+CREATE DATABASE IF NOT EXISTS colo_afeto
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+CREATE USER IF NOT EXISTS 'colo_afeto_user'@'localhost' IDENTIFIED BY 'And95079@';
+
+GRANT ALL PRIVILEGES ON colo_afeto.* TO 'colo_afeto_user'@'localhost';
+
+FLUSH PRIVILEGES;
+EXIT;
+*/
 
 const DB_HOST = 'localhost';
 const DB_NAME = 'colo_afeto';

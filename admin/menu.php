@@ -22,11 +22,13 @@ $adminMenuItems = [
     ['gestores', 'admin/gestores/index.php', 'bi-person-gear', 'Gestores'],
     ['configuracoes', 'admin/configuracoes/index.php', 'bi-sliders', 'Configurações'],
 ];
+$currentPermission = admin_permission_for_path();
 ?>
-<div class="panel-card bg-white p-3">
+<div class="panel-card admin-sidebar bg-white p-3">
+    <div class="admin-sidebar-heading">Gestão</div>
     <?php foreach ($adminMenuItems as [$permission, $path, $icon, $label]): ?>
         <?php if (admin_can($permission)): ?>
-            <a class="sidebar-link" href="<?= e(base_url($path)) ?>"><i class="bi <?= e($icon) ?>"></i> <?= e($label) ?></a>
+            <a class="sidebar-link <?= $currentPermission === $permission ? 'active' : '' ?>" href="<?= e(base_url($path)) ?>"><i class="bi <?= e($icon) ?>"></i> <span><?= e($label) ?></span></a>
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
