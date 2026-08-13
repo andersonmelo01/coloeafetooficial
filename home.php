@@ -75,19 +75,29 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             <div class="col-lg-6">
                 <div class="afeto-visual" aria-label="Identidade visual Colo e Afeto">
-                    <div class="afeto-blob">
-                        <div class="afeto-logo-mark">
-                            <!--<span>Colo</span>
-                            <strong>&</strong>
-                            <span>Afeto</span>-->
-                            <img class="brand-logo-img" src="<?= e(base_url('img/logo.jpeg')) ?>" alt="Colo e Afeto">
+                    <div class="afeto-visual-card">
+                        <div class="afeto-visual-topline">
+                            <span><i class="bi bi-heart-pulse"></i> cuidado materno-infantil</span>
+                            <strong>RJ</strong>
                         </div>
-                        <p>Thais Rocha</p>
+                        <div class="afeto-brand-panel">
+                            <div class="afeto-logo-mark">
+                                <img class="brand-logo-img" src="<?= e(base_url('img/logo.jpeg')) ?>" alt="Colo e Afeto">
+                            </div>
+                            <p>Acolhimento, orientação e presença para cada fase da maternidade.</p>
+                        </div>
+                        <div class="afeto-care-profile">
+                            <img src="<?= e(base_url('img/thais_perfil.jpeg')) ?>" alt="Thais Rocha">
+                            <div>
+                                <strong>Thais Rocha</strong>
+                                <span>escuta profissional e humanizada</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="afeto-float afeto-float-1"><i class="bi bi-flower1"></i> Aplicação Taping</div>
                     <div class="afeto-float afeto-float-2"><i class="bi bi-droplet"></i> Amamentação</div>
                     <div class="afeto-float afeto-float-3"><i class="bi bi-bag-heart"></i> Furinho Humanizado</div>
-                    <div class="afeto-float afeto-float-4"><i class="bi bi-bag-heart"></i> Doula</div>
+                    <div class="afeto-float afeto-float-4"><i class="bi bi-people-fill"></i> Doula</div>
                 </div>
             </div>
         </div>
