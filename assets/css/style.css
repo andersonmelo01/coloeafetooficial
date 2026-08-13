@@ -464,7 +464,7 @@ a{ transition: all .25s ease; }
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  object-fit: contain;
   background: #fff7ef;
 }
 
@@ -761,7 +761,7 @@ a{ transition: all .25s ease; }
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 8px;
   background: #fff7ef;
 }
