@@ -80,13 +80,13 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
     </div>
 </section>
 
-<section class="py-4">
+<section class="py-4" id="produtos">
     <div class="container">
         <div class="product-filter-row d-flex flex-wrap gap-2 mb-4">
-            <a class="btn btn-sm <?= $categoria === '' ? 'btn-brand' : 'btn-outline-brand' ?>" href="<?= e(base_url('loja/index.php' . $queryTodos)) ?>">Todos</a>
+            <a class="btn btn-sm <?= $categoria === '' ? 'btn-brand' : 'btn-outline-brand' ?>" href="<?= e(base_url('loja/index.php' . $queryTodos . '#produtos')) ?>">Todos</a>
             <?php foreach ($categorias as $cat): ?>
                 <?php $catQuery = '?' . http_build_query(array_filter(['q' => $busca, 'categoria' => $cat['slug']])); ?>
-                <a class="btn btn-sm <?= $categoria === $cat['slug'] ? 'btn-brand' : 'btn-outline-brand' ?>" href="<?= e(base_url('loja/index.php' . $catQuery)) ?>">
+                <a class="btn btn-sm <?= $categoria === $cat['slug'] ? 'btn-brand' : 'btn-outline-brand' ?>" href="<?= e(base_url('loja/index.php' . $catQuery . '#produtos')) ?>">
                     <?= e($cat['nome']) ?>
                 </a>
             <?php endforeach; ?>
