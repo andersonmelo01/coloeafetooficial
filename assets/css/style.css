@@ -600,6 +600,83 @@ a{ transition: all .25s ease; }
   margin-top: .3rem;
 }
 
+/* ---------- Catálogo de produtos ---------- */
+.product-card{
+  border: 1px solid rgba(107, 74, 63, .1);
+  border-radius: 8px;
+  box-shadow: 0 14px 34px rgba(107, 74, 63, .07);
+  display: flex;
+  flex-direction: column;
+}
+
+.product-media{
+  width: 100%;
+  height: 180px;
+  display: grid;
+  place-items: center;
+  padding: .75rem;
+  background: #fff7ef;
+  border-bottom: 1px solid rgba(107, 74, 63, .08);
+  color: var(--afeto-rosa-escuro);
+  text-decoration: none;
+}
+
+.product-media img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.product-media-link:hover{
+  background: #fffaf5;
+}
+
+.product-card > .p-4{
+  padding: 1rem !important;
+}
+
+.product-card .badge{
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.product-card h2{
+  font-size: 1rem;
+  line-height: 1.25;
+  margin-bottom: .4rem;
+}
+
+.product-card p.small{
+  margin-bottom: .75rem;
+}
+
+.product-card-actions{
+  align-items: flex-end !important;
+}
+
+.product-card-actions .btn{
+  padding: .5rem .85rem;
+}
+
+.product-detail-carousel img{
+  max-height: 620px;
+  object-fit: contain;
+  background: #fff7ef;
+}
+
+.product-detail-placeholder{
+  min-height: 420px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #fff7ef;
+  color: var(--afeto-rosa-escuro);
+  font-size: 4rem;
+}
+
 /* ---------- Depoimentos ---------- */
 .afeto-testimonials{ background: #fff; }
 .afeto-testimonial{
