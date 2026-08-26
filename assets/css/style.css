@@ -606,7 +606,7 @@ a{ transition: all .25s ease; }
   border-radius: 8px;
   box-shadow: 0 14px 34px rgba(107, 74, 63, .07);
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
+  grid-template-columns: 128px minmax(0, 1fr);
   align-items: start;
   gap: .85rem;
   min-height: 100%;
@@ -615,7 +615,7 @@ a{ transition: all .25s ease; }
 
 .product-media{
   width: 100%;
-  height: 104px;
+  height: 128px;
   display: grid;
   place-items: center;
   flex: 0 0 auto;
@@ -696,13 +696,13 @@ a{ transition: all .25s ease; }
 
 @media (max-width: 380px){
   .product-card{
-    grid-template-columns: 86px minmax(0, 1fr);
+    grid-template-columns: 98px minmax(0, 1fr);
     gap: .7rem;
     padding: .7rem;
   }
 
   .product-media{
-    height: 86px;
+    height: 98px;
   }
 }
 
