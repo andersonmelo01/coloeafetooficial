@@ -109,7 +109,7 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
                             <?php endif; ?>
                         </a>
                         <div class="p-4">
-                            <div class="d-flex justify-content-between gap-2 mb-2">
+                            <div class="product-card-badges d-flex justify-content-between gap-2 mb-2">
                                 <span class="badge text-bg-light"><?= e($produto['categoria'] ?? 'Categoria') ?></span>
                                 <?php if ($temPromocao): ?><span class="badge text-bg-danger"><i class="bi bi-megaphone"></i> Promo</span><?php endif; ?>
                                 <span class="badge text-bg-warning"><?= e($produto['grupo'] ?? 'Grupo') ?></span>
