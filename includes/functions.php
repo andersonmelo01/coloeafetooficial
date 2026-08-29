@@ -128,14 +128,21 @@ function partner_catalog(): array
     }
 
     return [
+        [   'name' => 'AMS Sistemas', 
+            'role' => 'Informática, Criação de Sites e Gestão de Conteúdo Digital', 
+            'summary' => 'Soluções em informática, criação e manutenção de sites, desenvolvimento de sistemas e gestão de conteúdo digital para empresas e profissionais que desejam fortalecer sua presença na internet.', 
+            'profile_url' => base_url('parceiros/ams.php'), 
+            'whatsapp_url' => 'https://wa.me/552i982846871', 
+            'image' => base_url('img/logoAms.png'), 
+            'keywords' => ['ams', 'ams sistemas', 'informática', 'criação de sites', 'sites', 'gestão de conteúdo digital', 'marketing digital'], ],
         [
-            'name' => 'Milena Santos',
+            'name' => 'Juliana Lobo - Pediatria e Neonatologia',
             'role' => 'doula parceira',
-            'summary' => 'Oferece apoio emocional e prático para gestantes e puérperas, com acolhimento antes, durante e depois do parto.',
-            'profile_url' => base_url('parceiros/milena-santos.php'),
-            'whatsapp_url' => 'https://wa.me/5522988441463',
-            'image' => base_url('img/millena_perfil.jpeg'),
-            'keywords' => ['milena', 'milena santos'],
+            'summary' => 'Cuidado especializado para bebês, crianças e suas famílias, desde os primeiros dias de vida.',
+            'profile_url' => base_url('parceiros/juliana-lobo.php'),
+            'whatsapp_url' => 'https://wa.me/5522992456743',
+            'image' => base_url('img/juliana_lobo_perfil.jpeg'),
+            'keywords' => ['juliana', 'juliana lobo', 'lobo'],
         ],
     ];
 }

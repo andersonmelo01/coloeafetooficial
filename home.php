@@ -243,7 +243,7 @@ require_once __DIR__ . '/includes/header.php';
     <section class="afeto-section afeto-parceiros" id="parceiros">
         <div class="container">
             <div class="text-center mb-5">
-                <span class="afeto-section-tag">Parceiros(as)</span>
+                <span class="afeto-section-tag">Parcerias</span>
                 <h2>Parceiros conveniados e credenciados</h2>
             </div>
             <div class="row g-4 align-items-stretch">
