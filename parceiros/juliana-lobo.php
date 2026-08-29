@@ -11,11 +11,10 @@ require_once __DIR__ . '/../includes/header.php';
 <section class="afeto-section afeto-partner-detail">
     <div class="container p-0">
         <div class="row align-items-center g-5">
-            <div class="col-lg-5">
-                <img src="<?= e(base_url('img/juliana_lobo_perfil.jpeg')) ?>" alt="Juliana Lobo" class="img-fluid rounded-4 shadow-sm">
+            <div class="col-10 col-md-6 col-lg-5 mx-auto text-center mb-4 mb-lg-0">
+                <img src="<?= e(base_url('img/juliana_lobo_perfil.png')) ?>" alt="Juliana Lobo" class="img-fluid rounded-4 shadow-sm">
             </div>
-            <div class="col-lg-7">
-                
+            <div class="col-12 col-lg-7">
                 <div class="partner-contact-block mt-0 p-2 p-md-2 rounded-5 shadow-sm bg-white border-0">
                     <span class="afeto-section-tag">Parceira</span>
                     <div class="partner-contact-block mt-1 rounded-5 shadow-sm border-0 overflow-hidden position-relative">

@@ -134,15 +134,40 @@ function partner_catalog(): array
             'profile_url' => base_url('parceiros/ams.php'), 
             'whatsapp_url' => 'https://wa.me/552i982846871', 
             'image' => base_url('img/logoAms.png'), 
-            'keywords' => ['ams', 'ams sistemas', 'informática', 'criação de sites', 'sites', 'gestão de conteúdo digital', 'marketing digital'], ],
+            'keywords' => ['ams', 'ams sistemas', 'informática', 'criação de sites', 'sites', 'gestão de conteúdo digital', 'marketing digital'], 
+        ],
+
         [
             'name' => 'Juliana Lobo - Pediatria e Neonatologia',
             'role' => 'doula parceira',
             'summary' => 'Cuidado especializado para bebês, crianças e suas famílias, desde os primeiros dias de vida.',
             'profile_url' => base_url('parceiros/juliana-lobo.php'),
             'whatsapp_url' => 'https://wa.me/5522992456743',
-            'image' => base_url('img/juliana_lobo_perfil.jpeg'),
+            'image' => base_url('img/juliana_lobo_perfil.png'),
             'keywords' => ['juliana', 'juliana lobo', 'lobo'],
+        ],
+
+        [
+            'name' => 'João Pedro Avelleda - Fotografia',
+            'role' => 'fotógrafo parceiro',
+            'summary' => 'Fotografia com sensibilidade para transformar momentos especiais em memórias que permanecem para sempre.',
+            'profile_url' => 'https://www.instagram.com/joaopedroavelleda/',
+            'whatsapp_url' => 'https://wa.me/5522998489835',
+            'image' => base_url('img/JoaoPedroAvelledo.png'),
+            'keywords' => [
+                'joao',
+                'joão',
+                'joao pedro',
+                'joão pedro',
+                'joao pedro avelleda',
+                'joão pedro avelleda',
+                'avelleda',
+                'fotografo',
+                'fotógrafo',
+                'fotografia',
+                'fotografia de eventos',
+                'fotografia de casamento'
+            ],
         ],
     ];
 }

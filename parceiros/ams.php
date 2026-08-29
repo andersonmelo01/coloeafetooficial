@@ -14,7 +14,7 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="row align-items-center g-5">
 
             <!-- IMAGEM / LOGO -->
-            <div class="col-lg-5 text-center">
+            <div class="col-10 col-md-6 col-lg-5 mx-auto text-center mb-4 mb-lg-0">
                 <img
                     src="<?= e(base_url('img/logoAms.png')) ?>"
                     alt="AMS Sistemas"
@@ -23,7 +23,7 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <!-- CONTEÚDO -->
-            <div class="col-lg-7">
+            <div class="col-12 col-lg-7">
 
                 <div class="partner-contact-block mt-0 p-2 p-md-2 rounded-5 shadow-sm bg-white border-0">
 
