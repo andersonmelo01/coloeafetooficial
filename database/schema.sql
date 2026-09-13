@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS entrega_tentativas (
 
 CREATE TABLE IF NOT EXISTS notas_fiscais (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  pedido_id INT NOT NULL,
+  pedido_id INT NULL,
   numero VARCHAR(30) NULL,
   serie VARCHAR(10) NULL,
   chave_acesso VARCHAR(60) NULL,
@@ -347,6 +347,93 @@ CREATE TABLE IF NOT EXISTS emails_envios (
   status VARCHAR(40) NOT NULL DEFAULT 'pendente',
   erro TEXT NULL,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS caixas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT NOT NULL,
+  saldo_inicial DECIMAL(10,2) NOT NULL DEFAULT 0,
+  saldo_final DECIMAL(10,2) NULL,
+  status ENUM('aberto', 'fechado', 'cancelado') NOT NULL DEFAULT 'aberto',
+  aberto_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fechado_em DATETIME NULL,
+  observacao TEXT NULL,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+CREATE TABLE IF NOT EXISTS vendas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  numero VARCHAR(30) NOT NULL,
+  usuario_id INT NOT NULL,
+  cliente_id INT NULL,
+  caixa_id INT NULL,
+  status ENUM('aberta', 'finalizada', 'cancelada') NOT NULL DEFAULT 'finalizada',
+  subtotal DECIMAL(10,2) NOT NULL DEFAULT 0,
+  desconto DECIMAL(10,2) NOT NULL DEFAULT 0,
+  total DECIMAL(10,2) NOT NULL DEFAULT 0,
+  observacao TEXT NULL,
+  finalizada_em DATETIME NULL,
+  cancelada_em DATETIME NULL,
+  cancelada_por INT NULL,
+  motivo_cancelamento TEXT NULL,
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_vendas_numero (numero),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+  FOREIGN KEY (cliente_id) REFERENCES usuarios(id),
+  FOREIGN KEY (caixa_id) REFERENCES caixas(id),
+  FOREIGN KEY (cancelada_por) REFERENCES usuarios(id)
+);
+
+CREATE TABLE IF NOT EXISTS venda_itens (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  venda_id INT NOT NULL,
+  produto_id INT NULL,
+  nome_produto VARCHAR(180) NOT NULL,
+  quantidade INT NOT NULL,
+  preco_unitario DECIMAL(10,2) NOT NULL,
+  total DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (venda_id) REFERENCES vendas(id),
+  FOREIGN KEY (produto_id) REFERENCES produtos(id)
+);
+
+CREATE TABLE IF NOT EXISTS venda_pagamentos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  venda_id INT NOT NULL,
+  metodo VARCHAR(40) NOT NULL,
+  valor DECIMAL(10,2) NOT NULL,
+  status ENUM('pendente', 'pago', 'cancelado') NOT NULL DEFAULT 'pago',
+  pago_em DATETIME NULL,
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (venda_id) REFERENCES vendas(id)
+);
+
+CREATE TABLE IF NOT EXISTS venda_parcelas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  venda_id INT NOT NULL,
+  parcela INT NOT NULL DEFAULT 1,
+  vencimento DATE NOT NULL,
+  valor DECIMAL(10,2) NOT NULL,
+  status ENUM('pendente', 'pago', 'cancelado') NOT NULL DEFAULT 'pendente',
+  pago_em DATETIME NULL,
+  pago_metodo VARCHAR(40) NULL,
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (venda_id) REFERENCES vendas(id)
+);
+
+CREATE TABLE IF NOT EXISTS caixa_movimentos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  caixa_id INT NOT NULL,
+  venda_id INT NULL,
+  tipo ENUM('entrada', 'saida', 'sangria') NOT NULL,
+  metodo VARCHAR(40) NULL,
+  valor DECIMAL(10,2) NOT NULL,
+  observacao VARCHAR(255) NULL,
+  usuario_id INT NULL,
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (caixa_id) REFERENCES caixas(id),
+  FOREIGN KEY (venda_id) REFERENCES vendas(id),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
 INSERT INTO usuarios (nome, email, senha_hash, tipo, ativo)

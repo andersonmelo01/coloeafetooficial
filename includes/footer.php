@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/functions.php';
-$footerPartners = partner_catalog();
-$footerChatTopics = $footerPartners ? 'serviços, parceiros e atendimento' : 'serviços e atendimento';
+$footerUser = current_user();
+$footerBot = bot_chat_profile($footerUser);
 ?>
 </main>
 <footer class="site-footer">
@@ -31,7 +31,6 @@ $footerChatTopics = $footerPartners ? 'serviços, parceiros e atendimento' : 'se
                 <a href="<?= e(base_url('auth/cadastro.php')) ?>">Criar cadastro</a>
                 <a href="<?= e(base_url('auth/login.php')) ?>">Entrar</a>
                 <a href="<?= e(base_url('cliente/chamados.php')) ?>">Chamados</a>
-                <a href="<?= e(base_url('admin/index.php')) ?>">Gestor</a>
             </div>
             <div class="col-lg-3">
                 <h2>Contato</h2>
@@ -83,35 +82,43 @@ $footerCartActive = strpos($footerScript, '/carrinho/') !== false || strpos($foo
 <?php endif; ?>
 
 <div class="chat-widget chat-closed" id="afetoChatWidget">
-    <button type="button" class="chat-toggle" id="afetoChatToggle" aria-expanded="false" aria-controls="afetoChatPanel">
-        <span>Ajuda</span>
+    <button type="button" class="chat-toggle" id="afetoChatToggle" aria-expanded="false" aria-controls="afetoChatPanel" aria-label="Abrir chat de ajuda">
         <i class="bi bi-chat-dots"></i>
+        <span>Ajuda</span>
     </button>
     <div class="chat-panel" id="afetoChatPanel" aria-hidden="true">
         <div class="chat-header">
-            <div>Precisa de ajuda?</div>
+            <div class="chat-header-info">
+                <span class="chat-avatar"><i class="bi bi-chat-heart-fill"></i></span>
+                <div>
+                    <div class="chat-header-title"><?= e($footerBot['titulo']) ?></div>
+                    <div class="chat-header-sub"><span class="chat-status-dot"></span> <?= e($footerBot['subtitulo']) ?></div>
+                </div>
+            </div>
             <button type="button" class="chat-close" id="afetoChatClose" aria-label="Fechar chat">✕</button>
         </div>
         <div class="chat-body" id="afetoChatBody">
-            <div class="chat-message bot">Olá! Eu sou a assistente Colo & Afeto. Posso tirar dúvidas sobre <?= e($footerChatTopics) ?>. Clique em uma pergunta ou escreva o que deseja saber.</div>
+            <div class="chat-message bot"><?= e($footerBot['saudacao']) ?></div>
         </div>
+        <div class="chat-typing" id="afetoChatTyping" hidden><span></span><span></span><span></span></div>
         <div class="chat-suggestions" id="afetoChatSuggestions">
-            <button type="button" class="chat-suggestion">Como funciona a doula?</button>
-            <button type="button" class="chat-suggestion">Quais serviços oferecemos?</button>
-            <button type="button" class="chat-suggestion">Como agendar atendimento?</button>
-            <?php foreach ($footerPartners as $partner): ?>
-                <button type="button" class="chat-suggestion">O que <?= e($partner['name']) ?> faz?</button>
+            <?php foreach ($footerBot['sugestoes'] as $sugestao): ?>
+                <button type="button" class="chat-suggestion"><?= e($sugestao) ?></button>
             <?php endforeach; ?>
         </div>
         <div class="chat-input-area">
             <input type="text" id="afetoChatInput" placeholder="Escreva sua dúvida..." aria-label="Mensagem de chat">
-            <button type="button" class="btn btn-whatsapp" id="afetoChatSend">Enviar</button>
+            <button type="button" class="btn btn-whatsapp" id="afetoChatSend"><i class="bi bi-send"></i></button>
         </div>
     </div>
 </div>
 
 <script type="application/json" id="afetoChatConfig">
-<?= json_encode(['partners' => $footerPartners], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>
+<?= json_encode([
+    'perfil' => $footerBot['perfil'],
+    'intencoes' => $footerBot['intencoes'],
+    'resposta_fallback' => $footerBot['resposta_fallback'],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>
 </script>
 <script src="<?= e(asset_url('bootstrap/js/bootstrap.bundle.min.js')) ?>"></script>
 <script src="<?= e(asset_url('js/app.js')) ?>"></script>

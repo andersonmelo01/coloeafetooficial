@@ -84,6 +84,13 @@ function database_schema_exists(): bool
         'faturamento_eventos',
         'webhook_eventos',
         'emails_envios',
+        'caixas',
+        'vendas',
+        'venda_itens',
+        'venda_pagamentos',
+        'venda_parcelas',
+        'caixa_movimentos',
+        'parceiros',
     ];
 
     $tableList = implode("','", $requiredTables);
@@ -247,6 +254,156 @@ function ensure_application_migrations(): void
     );
 
     $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS caixas (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario_id INT NOT NULL,
+            saldo_inicial DECIMAL(10,2) NOT NULL DEFAULT 0,
+            saldo_final DECIMAL(10,2) NULL,
+            status ENUM('aberto', 'fechado', 'cancelado') NOT NULL DEFAULT 'aberto',
+            aberto_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            fechado_em DATETIME NULL,
+            observacao TEXT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        )"
+    );
+
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS vendas (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            numero VARCHAR(30) NOT NULL,
+            usuario_id INT NOT NULL,
+            cliente_id INT NULL,
+            caixa_id INT NULL,
+            status ENUM('aberta', 'pendente', 'finalizada', 'cancelada') NOT NULL DEFAULT 'finalizada',
+            subtotal DECIMAL(10,2) NOT NULL DEFAULT 0,
+            desconto DECIMAL(10,2) NOT NULL DEFAULT 0,
+            total DECIMAL(10,2) NOT NULL DEFAULT 0,
+            observacao TEXT NULL,
+            finalizada_em DATETIME NULL,
+            cancelada_em DATETIME NULL,
+            cancelada_por INT NULL,
+            motivo_cancelamento TEXT NULL,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY uq_vendas_numero (numero),
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+            FOREIGN KEY (cliente_id) REFERENCES usuarios(id),
+            FOREIGN KEY (caixa_id) REFERENCES caixas(id),
+            FOREIGN KEY (cancelada_por) REFERENCES usuarios(id)
+        )"
+    );
+
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS venda_itens (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            venda_id INT NOT NULL,
+            produto_id INT NULL,
+            nome_produto VARCHAR(180) NOT NULL,
+            quantidade INT NOT NULL,
+            preco_unitario DECIMAL(10,2) NOT NULL,
+            total DECIMAL(10,2) NOT NULL,
+            FOREIGN KEY (venda_id) REFERENCES vendas(id),
+            FOREIGN KEY (produto_id) REFERENCES produtos(id)
+        )"
+    );
+
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS venda_pagamentos (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            venda_id INT NOT NULL,
+            metodo VARCHAR(40) NOT NULL,
+            valor DECIMAL(10,2) NOT NULL,
+            status ENUM('pendente', 'pago', 'cancelado') NOT NULL DEFAULT 'pago',
+            pago_em DATETIME NULL,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (venda_id) REFERENCES vendas(id)
+        )"
+    );
+
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS venda_parcelas (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            venda_id INT NOT NULL,
+            parcela INT NOT NULL DEFAULT 1,
+            vencimento DATE NOT NULL,
+            valor DECIMAL(10,2) NOT NULL,
+            status ENUM('pendente', 'pago', 'cancelado') NOT NULL DEFAULT 'pendente',
+            pago_em DATETIME NULL,
+            pago_metodo VARCHAR(40) NULL,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (venda_id) REFERENCES vendas(id)
+        )"
+    );
+
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS caixa_movimentos (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            caixa_id INT NOT NULL,
+            venda_id INT NULL,
+            tipo ENUM('entrada', 'saida', 'sangria') NOT NULL,
+            metodo VARCHAR(40) NULL,
+            valor DECIMAL(10,2) NOT NULL,
+            observacao VARCHAR(255) NULL,
+            usuario_id INT NULL,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (caixa_id) REFERENCES caixas(id),
+            FOREIGN KEY (venda_id) REFERENCES vendas(id),
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        )"
+    );
+
+    $vendaColumns = [
+        'email_recibo' => "ALTER TABLE vendas ADD COLUMN email_recibo VARCHAR(160) NULL AFTER cliente_id",
+        'cupom_no' => "ALTER TABLE vendas ADD COLUMN cupom_no VARCHAR(30) NULL AFTER numero",
+        'nfce_chave' => "ALTER TABLE vendas ADD COLUMN nfce_chave VARCHAR(60) NULL AFTER cupom_no",
+        'pix_txid' => "ALTER TABLE vendas ADD COLUMN pix_txid VARCHAR(60) NULL AFTER nfce_chave",
+        'pix_copiaecola' => "ALTER TABLE vendas ADD COLUMN pix_copiaecola TEXT NULL AFTER pix_txid",
+        'pix_qrcode' => "ALTER TABLE vendas ADD COLUMN pix_qrcode TEXT NULL AFTER pix_copiaecola",
+        'efi_charge_id' => "ALTER TABLE vendas ADD COLUMN efi_charge_id VARCHAR(80) NULL AFTER pix_qrcode",
+        'efi_charge_status' => "ALTER TABLE vendas ADD COLUMN efi_charge_status VARCHAR(40) NULL AFTER efi_charge_id",
+    ];
+
+    foreach ($vendaColumns as $column => $sql) {
+        if (!column_exists('vendas', $column)) {
+            $pdo->exec($sql);
+        }
+    }
+
+    $statusCheck = $pdo->prepare(
+        "SELECT COLUMN_TYPE FROM information_schema.columns
+         WHERE table_schema = :database AND table_name = 'vendas' AND column_name = 'status'"
+    );
+    $statusCheck->execute(['database' => DB_NAME]);
+    $statusType = (string) ($statusCheck->fetch()['COLUMN_TYPE'] ?? '');
+    if (stripos($statusType, "'pendente'") === false) {
+        $pdo->exec(
+            "ALTER TABLE vendas MODIFY COLUMN status ENUM('aberta', 'pendente', 'finalizada', 'cancelada') NOT NULL DEFAULT 'finalizada'"
+        );
+    }
+
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS parceiros (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            slug VARCHAR(120) NOT NULL UNIQUE,
+            nome VARCHAR(160) NOT NULL,
+            papel VARCHAR(120) NULL,
+            resumo TEXT NULL,
+            descricao LONGTEXT NULL,
+            imagem VARCHAR(255) NULL,
+            whatsapp_url VARCHAR(255) NULL,
+            site_url VARCHAR(255) NULL,
+            instagram_url VARCHAR(255) NULL,
+            facebook_url VARCHAR(255) NULL,
+            linkedin_url VARCHAR(255) NULL,
+            keywords VARCHAR(255) NULL,
+            ordem INT NOT NULL DEFAULT 0,
+            ativo TINYINT(1) NOT NULL DEFAULT 1,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )"
+    );
+
+    $pdo->exec(
         "CREATE TABLE IF NOT EXISTS admin_perfis (
             id INT AUTO_INCREMENT PRIMARY KEY,
             nome VARCHAR(120) NOT NULL UNIQUE,
@@ -382,6 +539,12 @@ function ensure_application_migrations(): void
     }
 
     try {
+        $pdo->exec("ALTER TABLE notas_fiscais MODIFY pedido_id INT NULL");
+    } catch (Throwable $e) {
+        // NFC-e de PDV pode ser registrada sem pedido associado; mantém bases restritivas funcionando.
+    }
+
+    try {
         $pdo->exec("ALTER TABLE notas_fiscais MODIFY status ENUM('pendente', 'transmitida', 'autorizada', 'cancelada', 'rejeitada', 'corrigida') NOT NULL DEFAULT 'pendente'");
     } catch (Throwable $e) {
         // Mantém a instalação funcionando mesmo em bases com restrição para alterar ENUM.
@@ -451,6 +614,7 @@ function ensure_application_migrations(): void
         ['loja.vendas_habilitadas', '1', 'loja'],
         ['loja.mensagem_catalogo', 'A loja está temporariamente funcionando como catálogo. As vendas online estão pausadas, mas os produtos podem ser visualizados normalmente.', 'loja'],
         ['parceiros.habilitados', '0', 'parceiros'],
+        ['pdv.controle_estoque', '1', 'pdv'],
         ['email.habilitado', '0', 'email'],
         ['email.smtp_host', '', 'email'],
         ['email.smtp_port', '587', 'email'],
@@ -470,4 +634,62 @@ function ensure_application_migrations(): void
         "INSERT IGNORE INTO admin_perfis (nome, descricao, administrador, ativo)
          VALUES ('Administrador', 'Acesso total ao sistema.', 1, 1)"
     );
+
+    $seedPartners = [
+        [
+            'slug' => 'ams-sistemas',
+            'nome' => 'AMS Sistemas',
+            'papel' => 'Informática, Criação de Sites e Gestão de Conteúdo Digital',
+            'resumo' => 'Soluções em informática, criação e manutenção de sites, desenvolvimento de sistemas e gestão de conteúdo digital para empresas e profissionais que desejam fortalecer sua presença na internet.',
+            'descricao' => '',
+            'imagem' => 'img/logoAms.png',
+            'whatsapp_url' => 'https://wa.me/5521982846871',
+            'site_url' => '',
+            'instagram_url' => '',
+            'facebook_url' => '',
+            'linkedin_url' => '',
+            'keywords' => 'ams, ams sistemas, informática, criação de sites, sites, gestão de conteúdo digital, marketing digital',
+            'ordem' => 1,
+        ],
+        [
+            'slug' => 'juliana-lobo',
+            'nome' => 'Juliana Lobo - Pediatria e Neonatologia',
+            'papel' => 'doula parceira',
+            'resumo' => 'Cuidado especializado para bebês, crianças e suas famílias, desde os primeiros dias de vida.',
+            'descricao' => 'Cuidado especializado para bebês, crianças e suas famílias, desde os primeiros dias de vida. Acompanhamento do crescimento e desenvolvimento, prevenção e tratamento de doenças, além de orientações personalizadas para cada fase da infância, com atenção, acolhimento e carinho.',
+            'imagem' => 'img/juliana_lobo_perfil.png',
+            'whatsapp_url' => 'https://wa.me/5522992456743',
+            'site_url' => 'julianaLobo.html',
+            'instagram_url' => 'https://www.instagram.com/julobopediatra?igsi=NnM2c20wMm9iOTJ0',
+            'facebook_url' => 'https://facebook.com/',
+            'linkedin_url' => 'https://linkedin.com/',
+            'keywords' => 'juliana, juliana lobo, lobo',
+            'ordem' => 2,
+        ],
+        [
+            'slug' => 'joao-pedro-avelleda',
+            'nome' => 'João Pedro Avelleda - Fotografia',
+            'papel' => 'fotógrafo parceiro',
+            'resumo' => 'Fotografia com sensibilidade para transformar momentos especiais em memórias que permanecem para sempre.',
+            'descricao' => '',
+            'imagem' => 'img/JoaoPedroAvelledo.png',
+            'whatsapp_url' => 'https://wa.me/5522998489835',
+            'site_url' => 'https://www.instagram.com/joaopedroavelleda/',
+            'instagram_url' => 'https://www.instagram.com/joaopedroavelleda/',
+            'facebook_url' => '',
+            'linkedin_url' => '',
+            'keywords' => 'joao, joão, joao pedro, joão pedro, joao pedro avelleda, joão pedro avelleda, avelleda, fotografo, fotógrafo, fotografia, fotografia de eventos, fotografia de casamento',
+            'ordem' => 3,
+        ],
+    ];
+
+    $stmtPartner = $pdo->prepare(
+        "INSERT IGNORE INTO parceiros
+         (slug, nome, papel, resumo, descricao, imagem, whatsapp_url, site_url, instagram_url, facebook_url, linkedin_url, keywords, ordem, ativo)
+         VALUES
+         (:slug, :nome, :papel, :resumo, :descricao, :imagem, :whatsapp_url, :site_url, :instagram_url, :facebook_url, :linkedin_url, :keywords, :ordem, 1)"
+    );
+    foreach ($seedPartners as $partner) {
+        $stmtPartner->execute($partner);
+    }
 }

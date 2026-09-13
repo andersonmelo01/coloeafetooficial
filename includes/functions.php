@@ -127,48 +127,358 @@ function partner_catalog(): array
         return [];
     }
 
+    if (!function_exists('db_one')) {
+        return [];
+    }
+
+    $rows = db_all(
+        "SELECT * FROM parceiros WHERE ativo = 1 ORDER BY ordem ASC, nome ASC"
+    );
+
+    $catalog = [];
+    foreach ($rows as $row) {
+        $keywords = array_filter(array_map('trim', explode(',', (string) $row['keywords'])));
+        $slug = (string) ($row['slug'] ?? '');
+        if ($slug !== '' && !in_array($slug, $keywords, true)) {
+            $keywords[] = $slug;
+        }
+        $nome = (string) ($row['nome'] ?? '');
+        if ($nome !== '') {
+            $keywords[] = $nome;
+        }
+
+        $profileUrl = (string) ($row['site_url'] ?? '');
+        if ($profileUrl === '' || !preg_match('#^https?://#i', $profileUrl)) {
+            $profileUrl = base_url('parceiros/perfil.php?slug=' . urlencode($slug));
+        }
+
+        $imageUrl = (string) ($row['imagem'] ?? '');
+        if ($imageUrl !== '' && !preg_match('#^https?://#i', $imageUrl)) {
+            $imageUrl = base_url($imageUrl);
+        }
+
+        $catalog[] = [
+            'id' => (int) $row['id'],
+            'name' => $nome,
+            'role' => (string) ($row['papel'] ?? ''),
+            'summary' => (string) ($row['resumo'] ?? ''),
+            'description' => (string) ($row['descricao'] ?? ''),
+            'profile_url' => $profileUrl,
+            'whatsapp_url' => (string) ($row['whatsapp_url'] ?? ''),
+            'instagram_url' => (string) ($row['instagram_url'] ?? ''),
+            'facebook_url' => (string) ($row['facebook_url'] ?? ''),
+            'linkedin_url' => (string) ($row['linkedin_url'] ?? ''),
+            'image' => $imageUrl,
+            'keywords' => array_values(array_unique($keywords)),
+        ];
+    }
+
+    return $catalog;
+}
+
+function partner_upload_dir(): string
+{
+    $dir = dirname(__DIR__) . '/uploads/parceiros';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
+
+    return $dir;
+}
+
+function partner_upload_image(string $field = 'imagem'): ?string
+{
+    if (empty($_FILES[$field]) || ($_FILES[$field]['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    $error = (int) ($_FILES[$field]['error'] ?? UPLOAD_ERR_OK);
+    if ($error !== UPLOAD_ERR_OK || (int) ($_FILES[$field]['size'] ?? 0) > 5 * 1024 * 1024) {
+        return null;
+    }
+
+    $allowed = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        'image/gif' => 'gif',
+    ];
+    $tmp = (string) ($_FILES[$field]['tmp_name'] ?? '');
+    $info = @getimagesize($tmp);
+    $mime = $info['mime'] ?? '';
+    if ($tmp === '' || !isset($allowed[$mime])) {
+        return null;
+    }
+
+    $filename = 'parceiro-' . bin2hex(random_bytes(8)) . '.' . $allowed[$mime];
+    if (!move_uploaded_file($tmp, partner_upload_dir() . '/' . $filename)) {
+        return null;
+    }
+
+    return 'uploads/parceiros/' . $filename;
+}
+
+function partner_slugify(string $nome): string
+{
+    $slug = strtolower(trim($nome));
+    $slug = preg_replace('/[^a-z0-9]+/i', '-', (string) $slug);
+    $slug = trim((string) $slug, '-');
+    return $slug !== '' ? $slug : 'parceiro-' . date('YmdHis');
+}
+
+function bot_whatsapp_url(): string
+{
+    return 'https://wa.me/5521982846871';
+}
+
+function controle_estoque_habilitado(): bool
+{
+    return app_config('pdv.controle_estoque', '1') === '1';
+}
+
+function bot_chat_profile(?array $usuario): array
+{
+    $tipo = (string) ($usuario['tipo'] ?? '');
+
+    if (in_array($tipo, ['admin', 'entregador'], true)) {
+        return bot_profile_gestor();
+    }
+
+    if ($tipo === 'cliente') {
+        return bot_profile_cliente($usuario);
+    }
+
+    return bot_profile_visitante();
+}
+
+function bot_profile_visitante(): array
+{
+    $wa = bot_whatsapp_url();
+    $parceiros = function_exists('partner_catalog') ? partner_catalog() : [];
+
+    $intencoes = [
+        [
+            'matcher' => 'como funciona.*doula|doula|parto',
+            'text' => 'A nossa doula oferece apoio antes, durante e depois do parto. Ela ajuda com preparação emocional, presença no parto, orientação prática para amamentação e apoio à família no pós-parto. É um acolhimento humano que traz mais segurança e confiança.',
+            'acoes' => [['label' => 'Agendar atendimento', 'url' => $wa]],
+        ],
+        [
+            'matcher' => 'quais serviços|serviços|servicos|o que vocês oferecem|oferecem|atendimento materno',
+            'text' => $parceiros
+                ? 'Oferecemos atendimento materno, suporte em amamentação e pós-parto, taping pós-parto, cuidados de furinho humanizado e serviço de doula. Também indicamos parceiros confiáveis e temos uma curadoria de produtos para cada fase da maternidade.'
+                : 'Oferecemos atendimento materno, suporte em amamentação e pós-parto, taping pós-parto, cuidados de furinho humanizado e serviço de doula. Também temos uma curadoria de produtos para cada fase da maternidade.',
+        ],
+        [
+            'matcher' => 'agendar|agenda|marcar|atendimento|orçamento|orcamento',
+            'text' => 'Para agendar, você pode enviar uma mensagem no WhatsApp e escolher o melhor dia e horário. Também ajudamos a definir o serviço mais adequado para a sua fase materna.',
+            'acoes' => [['label' => 'Falar no WhatsApp', 'url' => $wa]],
+        ],
+        [
+            'matcher' => 'amamenta|amamentação|amamentacao|pega|mama|mamífero',
+            'text' => 'No apoio à amamentação, trabalhamos para melhorar a pega, reduzir desconfortos e aumentar a segurança da mãe. Também oferecemos orientações sobre rotina, conforto do bebê e suporte à família para o momento de amamentar.',
+        ],
+        [
+            'matcher' => 'pós-?parto|pos-?parto|recuperação|recuperacao|quarentena',
+            'text' => 'O pós-parto pode ser um período desafiador. Nosso suporte inclui orientação sobre cuidados do bebê, autocuidado da mãe, organização da rotina e acolhimento emocional para você e sua família.',
+        ],
+        [
+            'matcher' => 'furinho|umbigo|pavio|cordão|cordao',
+            'text' => 'O cuidado com o furinho humanizado é feito com atenção e delicadeza. Orientamos limpeza, sinais de alerta e como deixar esse momento mais tranquilo para mãe e bebê.',
+        ],
+        [
+            'matcher' => 'produto|loja|catalogo|catálogo|produtos|comprar|retirada|entrega|frete',
+            'text' => 'Temos uma curadoria de produtos para amamentação, pós-parto e bebê. Você pode conhecer o catálogo online e receber indicações de itens que combinam com a sua fase e as suas necessidades.',
+            'acoes' => [['label' => 'Ver catálogo', 'url' => base_url('loja/index.php')]],
+        ],
+        [
+            'matcher' => 'onde|local|presencial|online|endereço|endereco',
+            'text' => 'Nosso atendimento é pensado para acolher você com flexibilidade, oferecendo suporte presencial quando possível e orientação online quando for melhor para a sua rotina.',
+        ],
+        [
+            'matcher' => 'preço|preco|valor|custo|quanto custa|pacote',
+            'text' => 'Os valores variam conforme o serviço e o tempo de atendimento. Para uma proposta personalizada, fale conosco pelo WhatsApp e podemos indicar o pacote mais adequado para você.',
+            'acoes' => [['label' => 'Pedir proposta', 'url' => $wa]],
+        ],
+        [
+            'matcher' => 'whatsapp|contato|falar|telefone|emaill|inhbox',
+            'text' => 'O melhor caminho para contato imediato é pelo WhatsApp. Lá você pode tirar dúvidas, agendar atendimento ou pedir orientação rápida com a nossa equipe materna.',
+            'acoes' => [['label' => 'Abrir WhatsApp', 'url' => $wa]],
+        ],
+    ];
+
+    $sugestoes = ['Como funciona a doula?', 'Quais serviços oferecemos?', 'Como agendar atendimento?', 'Como comprar na loja?'];
+    foreach ($parceiros as $partner) {
+        $sugestoes[] = 'O que ' . $partner['name'] . ' faz?';
+    }
+
+    if ($parceiros) {
+        $palavras = array_merge(['parceir'], ...array_map(static fn ($p) => [$p['name'], ...(array) $p['keywords']], $parceiros));
+        $palavras = array_values(array_unique(array_filter($palavras)));
+        $matcher = implode('|', array_map('preg_quote', $palavras));
+        if ($matcher !== '') {
+            $texto = implode("\n\n", array_map(static fn ($p) => $p['name'] . ' atua como ' . $p['role'] . '. ' . $p['summary'] . ($p['whatsapp_url'] ? ' Você também pode falar diretamente pelo WhatsApp informado no perfil.' : ''), $parceiros));
+            $intencoes[] = ['matcher' => $matcher, 'text' => $texto];
+        }
+    }
+
     return [
-        [   'name' => 'AMS Sistemas', 
-            'role' => 'Informática, Criação de Sites e Gestão de Conteúdo Digital', 
-            'summary' => 'Soluções em informática, criação e manutenção de sites, desenvolvimento de sistemas e gestão de conteúdo digital para empresas e profissionais que desejam fortalecer sua presença na internet.', 
-            'profile_url' => base_url('parceiros/ams.php'), 
-            'whatsapp_url' => 'https://wa.me/552i982846871', 
-            'image' => base_url('img/logoAms.png'), 
-            'keywords' => ['ams', 'ams sistemas', 'informática', 'criação de sites', 'sites', 'gestão de conteúdo digital', 'marketing digital'], 
-        ],
+        'perfil' => 'visitante',
+        'titulo' => 'Assistente Colo & Afeto',
+        'subtitulo' => 'Online · responde agora',
+        'saudacao' => 'Olá! Eu sou a assistente Colo & Afeto. Posso tirar dúvidas sobre serviços, produtos e parceiros. Clique em uma pergunta ou escreva o que deseja saber.',
+        'sugestoes' => $sugestoes,
+        'intencoes' => $intencoes,
+        'resposta_fallback' => 'Estou aqui para acolher! Se quiser, escreva sua dúvida com palavras como "amamentação", "pós-parto", "doula" ou "serviço", e eu te respondo com mais detalhes.',
+    ];
+}
 
-        [
-            'name' => 'Juliana Lobo - Pediatria e Neonatologia',
-            'role' => 'doula parceira',
-            'summary' => 'Cuidado especializado para bebês, crianças e suas famílias, desde os primeiros dias de vida.',
-            'profile_url' => base_url('parceiros/juliana-lobo.php'),
-            'whatsapp_url' => 'https://wa.me/5522992456743',
-            'image' => base_url('img/juliana_lobo_perfil.png'),
-            'keywords' => ['juliana', 'juliana lobo', 'lobo'],
-        ],
+function bot_profile_cliente(array $usuario): array
+{
+    $wa = bot_whatsapp_url();
+    $id = (int) ($usuario['id'] ?? 0);
+    $primeiroNome = trim(explode(' ', (string) ($usuario['nome'] ?? 'Cliente'))[0]);
 
+    $totalPedidos = 0;
+    $ultimoPedido = null;
+    if ($id > 0) {
+        $totalPedidos = (int) (db_one("SELECT COUNT(*) AS c FROM pedidos WHERE usuario_id = :id", ['id' => $id])['c'] ?? 0);
+        $ultimoPedido = db_one("SELECT * FROM pedidos WHERE usuario_id = :id ORDER BY criado_em DESC LIMIT 1", ['id' => $id]);
+    }
+
+    if ($ultimoPedido) {
+        $estado = ucfirst((string) $ultimoPedido['status']);
+        $pedidoTexto = 'Seu pedido #' . (int) $ultimoPedido['id'] . ' está "' . $estado . '". ';
+        $pedidoTexto .= 'Você pode acompanhar cada atualização na sua área do cliente.';
+    } elseif ($totalPedidos > 0) {
+        $pedidoTexto = 'Você já fez ' . $totalPedidos . ' pedido(s) conosco. Acesse a sua área do cliente para acompanhar o status de cada um.';
+    } else {
+        $pedidoTexto = 'Você ainda não fez nenhum pedido. Quando quiser, é só escolher um produto na loja e finalizar a compra.';
+    }
+
+    $intencoes = [
         [
-            'name' => 'João Pedro Avelleda - Fotografia',
-            'role' => 'fotógrafo parceiro',
-            'summary' => 'Fotografia com sensibilidade para transformar momentos especiais em memórias que permanecem para sempre.',
-            'profile_url' => 'https://www.instagram.com/joaopedroavelleda/',
-            'whatsapp_url' => 'https://wa.me/5522998489835',
-            'image' => base_url('img/JoaoPedroAvelledo.png'),
-            'keywords' => [
-                'joao',
-                'joão',
-                'joao pedro',
-                'joão pedro',
-                'joao pedro avelleda',
-                'joão pedro avelleda',
-                'avelleda',
-                'fotografo',
-                'fotógrafo',
-                'fotografia',
-                'fotografia de eventos',
-                'fotografia de casamento'
-            ],
+            'matcher' => 'pedido|carrinho|status|rastreio|rastrear|acompanhar|onde está|compr',
+            'text' => $pedidoTexto,
+            'acoes' => [['label' => 'Ver meus pedidos', 'url' => base_url('cliente/pedidos.php')]],
         ],
+        [
+            'matcher' => 'cadastro|cadastrar|entrar|login|senha|conta',
+            'text' => 'Cadastro e acesso rápido: você pode criar sua conta ou entrar quando quiser para acompanhar pedidos, salvar endereços e abrir chamados.',
+            'acoes' => [['label' => 'Minha conta', 'url' => base_url('cliente/index.php')]],
+        ],
+        [
+            'matcher' => 'chamado|dúvida|duvida|suporte|ajuda|reclama',
+            'text' => 'Precisa de ajuda com um pedido ou produto? Abra um chamado na sua área do cliente e nossa equipe acompanha até a solução.',
+            'acoes' => [['label' => 'Abrir chamado', 'url' => base_url('cliente/chamados.php')]],
+        ],
+        [
+            'matcher' => 'pagamento|pix|pagar|boleto|cartão|cartao|parcel',
+            'text' => 'As compras podem ser pagas com Pix, cartão e outras formas disponíveis no checkout. Após o pagamento, o status do pedido é atualizado na sua área do cliente. Se algo não estiver conforme, abra um chamado.',
+            'acoes' => [['label' => 'Ir para a loja', 'url' => base_url('loja/index.php')]],
+        ],
+        [
+            'matcher' => 'retirada|entrega|enviado|receber|frete',
+            'text' => 'Acompanhe se o seu pedido vai ser retirado ou entregue direto na sua casa. O status "enviado" indica que o pacote está a caminho, e você pode conferir os detalhes na sua área do cliente.',
+            'acoes' => [['label' => 'Ver meus pedidos', 'url' => base_url('cliente/pedidos.php')]],
+        ],
+        [
+            'matcher' => 'whatsapp|contato|falar|telefone',
+            'text' => 'Se preferir um atendimento humano, fale com a nossa equipe pelo WhatsApp. Estamos prontos para acolher você.',
+            'acoes' => [['label' => 'Abrir WhatsApp', 'url' => $wa]],
+        ],
+    ];
+
+    $sugestoes = ['Onde está meu pedido?', 'Como faço um chamado?', 'Como comprar na loja?', 'Formas de pagamento'];
+
+    return [
+        'perfil' => 'cliente',
+        'titulo' => 'Atendimento ao cliente',
+        'subtitulo' => 'Online · em que posso ajudar?',
+        'saudacao' => 'Olá, ' . $primeiroNome . '! Aqui você pode acompanhar pedidos, abrir chamados e muito mais. Como posso te ajudar hoje?',
+        'sugestoes' => $sugestoes,
+        'intencoes' => $intencoes,
+        'resposta_fallback' => 'Posso te ajudar com pedidos, pagamentos, entregas ou chamados. Use palavras como "pedido", "pagamento", "entrega" ou "chamado", ou abra um chamado na sua área do cliente.',
+    ];
+}
+
+function bot_profile_gestor(): array
+{
+    $intencoes = [
+        [
+            'matcher' => 'venda|pdv|caixa.*registrar|registrar.*venda|lançar|lancar|cobrar',
+            'text' => 'Para registrar uma venda no PDV: acesse "PDV Fácil", clique nos produtos, defina cliente quando necessário, escolha a forma de pagamento e finalize. O cupom é gerado automaticamente e pode ser impresso ou enviado por e-mail.',
+            'acoes' => [['label' => 'Abrir PDV Fácil', 'url' => base_url('admin/vendas/index.php')], ['label' => 'Histórico de vendas', 'url' => base_url('admin/vendas/historico.php')]],
+        ],
+        [
+            'matcher' => 'caixa|abrir caixa|fechar caixa|sangria|suprimento|movimento',
+            'text' => 'O fluxo de caixa é controlado na área de vendas: abra o caixa no início do expediente, faça sangrias/suprimentos se necessário e feche no final para conferir o total. As entradas e saídas ficam registradas para conferência.',
+            'acoes' => [['label' => 'Gerenciar caixa', 'url' => base_url('admin/vendas/caixa.php')]],
+        ],
+        [
+            'matcher' => 'cupom|nfce|nfc-e|nota fiscal|fiscal|imprimir',
+            'text' => 'Quando o módulo fiscal está habilitado, a venda gera cupom NFC-e (com chave de acesso) e registra a nota para envio. Caso contrário, emite cupom não fiscal. Ambos podem ser reimpressos ou enviados por e-mail no histórico de vendas.',
+            'acoes' => [['label' => 'Histórico de vendas', 'url' => base_url('admin/vendas/historico.php')], ['label' => 'NF-e', 'url' => base_url('admin/notas/index.php')]],
+        ],
+        [
+            'matcher' => 'pix|cartão|cartao|pagamento|efi|receber|à prazo|a prazo|parcel',
+            'text' => 'Dinheiro e Pix são registrados direto no caixa. Cartão com tokenção online gera cobrança Efi; sem token, você registra o pagamento manualmente. Vendas a prazo exigem cliente cadastrado e geram parcelas para receber depois. Pagamentos pendentes aparecem em "Confirmar".',
+            'acoes' => [['label' => 'Confirmar pagamentos', 'url' => base_url('admin/vendas/confirmar.php')], ['label' => 'Receber venda', 'url' => base_url('admin/vendas/receber.php')]],
+        ],
+        [
+            'matcher' => 'produto|cadastrar produto|preço|preco|estoque|categoria|promo',
+            'text' => 'Cadastre e organize produtos em Produtos, controle reposições em Estoque e crie Categorias, Grupos e Promoções para organizar a vitrine da loja.',
+            'acoes' => [['label' => 'Produtos', 'url' => base_url('admin/produtos/index.php')], ['label' => 'Estoque', 'url' => base_url('admin/estoque/index.php')]],
+        ],
+        [
+            'matcher' => 'cliente|cadastrar cliente',
+            'text' => 'A pasta Clientes guarda o cadastro completo de cada cliente, usado nas vendas a prazo e nos relatórios.',
+            'acoes' => [['label' => 'Clientes', 'url' => base_url('admin/clientes/index.php')]],
+        ],
+        [
+            'matcher' => 'parceiro|conveniad',
+            'text' => 'Parceiros são exibidos no site e no chat (se a visibilidade estiver habilitada em Configurações). Cadastre com nome, imagem, links e ordem de exibição.',
+            'acoes' => [['label' => 'Novo parceiro', 'url' => base_url('admin/parceiros/novo.php')], ['label' => 'Lista de parceiros', 'url' => base_url('admin/parceiros/index.php')], ['label' => 'Configurações', 'url' => base_url('admin/configuracoes/index.php')]],
+        ],
+        [
+            'matcher' => 'pedido|loja|checkout|compra online|site',
+            'text' => 'Os pedidos da loja ficam em Pedidos: você acompanha pagamento, separação, envio e entrega, e cada pedido tem detalhes fiscais individuais.',
+            'acoes' => [['label' => 'Pedidos', 'url' => base_url('admin/pedidos/index.php')]],
+        ],
+        [
+            'matcher' => 'entrega|entregador|frete|rastreio',
+            'text' => 'Entregas e entregadores ficam em Entregas/Entregadores, com histórico de cada profissional e acompanhamento dos envios dos pedidos.',
+            'acoes' => [['label' => 'Entregas', 'url' => base_url('admin/entregas/index.php')], ['label' => 'Entregadores', 'url' => base_url('admin/entregadores/index.php')]],
+        ],
+        [
+            'matcher' => 'relatório|relatorio|resumo|vendas.*[ou]?|dashboard|indicador',
+            'text' => 'O painel e os Relatórios mostram vendas, valores recebidos, clientes, produtos mais vendidos e outros indicadores para acompanhar o desempenho.',
+            'acoes' => [['label' => 'Dashboard', 'url' => base_url('admin/index.php')], ['label' => 'Relatórios', 'url' => base_url('admin/relatorios/index.php')], ['label' => 'Faturamento', 'url' => base_url('admin/faturamento/index.php')]],
+        ],
+        [
+            'matcher' => 'config|chave|token|efi|certificado|credencia|email|hospedagem|whatsapp',
+            'text' => 'A maioria das integrações é ajustada em Configurações: credenciais Efi (Pix/cartão), módulo fiscal/NFC-e, envio de e-mail, loja e seções do site.',
+            'acoes' => [['label' => 'Configurações', 'url' => base_url('admin/configuracoes/index.php')], ['label' => 'Pagamentos', 'url' => base_url('admin/pagamentos/index.php')]],
+        ],
+        [
+            'matcher' => 'chamado|suporte|cliente.*contato|dúvida|duvida',
+            'text' => 'Chamados dos clientes ficam na pasta Chamados: responda, acompanhe a resolução e mantenha o histórico de atendimento.',
+            'acoes' => [['label' => 'Chamados', 'url' => base_url('admin/chamados/index.php')]],
+        ],
+        [
+            'matcher' => 'usuário|usuario|gestor|perfil|permissão|permissao|acesso',
+            'text' => 'Usuários e permissões são controlados em Gestores e Perfis: cada perfil define as permissões de acesso às pastas do painel.',
+            'acoes' => [['label' => 'Gestores', 'url' => base_url('admin/gestores/index.php')], ['label' => 'Perfis', 'url' => base_url('admin/perfis/index.php')]],
+        ],
+    ];
+
+    return [
+        'perfil' => 'gestor',
+        'titulo' => 'Assistente do Gestor',
+        'subtitulo' => 'Online · ajuda com o sistema',
+        'saudacao' => 'Olá! Eu sou o assistente interno do sistema. Posso te ajudar a usar o PDV, gerenciar cadastros, pedidos, estoque, fiscal e configurações. O que você quer fazer?',
+        'sugestoes' => ['Como registrar uma venda no caixa?', 'Como abrir e fechar o caixa?', 'Como emitir o cupom/NFC-e?', 'Como cadastrar um parceiro?'],
+        'intencoes' => $intencoes,
+        'resposta_fallback' => 'Ainda não encontrei uma resposta pronta para isso. Use o menu lateral do painel para navegar, ou me pergunte sobre "venda", "caixa", "cupom", "produto", "parceiro" ou "configurações".',
     ];
 }
 
@@ -220,6 +530,8 @@ function admin_permission_catalog(): array
         'categorias' => 'Categorias',
         'grupos' => 'Grupos',
         'pedidos' => 'Pedidos',
+        'vendas' => 'Vendas presenciais (PDV Fácil)',
+        'parceiros' => 'Parceiros',
         'entregas' => 'Entregas',
         'entregadores' => 'Entregadores',
         'clientes' => 'Clientes',

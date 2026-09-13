@@ -42,6 +42,9 @@ if (!$produto) {
 $imagens = product_images((int) $produto['id']);
 $preco = promotion_price($produto);
 $estoque = (int) ($produto['estoque'] ?? 0);
+$controleEstoque = controle_estoque_habilitado();
+$semEstoque = $controleEstoque && $estoque <= 0;
+$maxQuantidade = $controleEstoque ? max(1, $estoque) : 9999;
 $temPromocao = !empty($produto['promo_titulo']) || $preco < (float) $produto['preco'];
 $vendasHabilitadas = loja_vendas_enabled();
 $pageTitle = $produto['nome'];
@@ -101,7 +104,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
                         <div class="text-secondary text-decoration-line-through"><?= money_br((float) $produto['preco']) ?></div>
                     <?php endif; ?>
                     <strong class="display-6 text-danger"><?= money_br($preco) ?></strong>
-                    <div class="small text-secondary mt-1">Estoque disponível: <?= $estoque ?></div>
+                    <?php if ($controleEstoque): ?><div class="small text-secondary mt-1">Estoque disponível: <?= $estoque ?></div><?php endif; ?>
                 </div>
                 <?php if (!empty($produto['descricao'])): ?>
                     <div class="border-top border-bottom py-4 mb-4">
@@ -116,8 +119,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
                         <input type="hidden" name="nome" value="<?= e($produto['nome']) ?>">
                         <input type="hidden" name="preco" value="<?= e((string) $preco) ?>">
                         <input type="hidden" name="voltar" value="<?= e($_SERVER['REQUEST_URI'] ?? base_url('loja/produto.php?id=' . (int) $produto['id'])) ?>">
-                        <div class="col-md-4"><input class="form-control" name="quantidade" type="number" min="1" max="<?= max(1, $estoque) ?>" value="1" <?= $estoque <= 0 ? 'disabled' : '' ?>></div>
-                        <div class="col-md-8"><button class="btn btn-brand w-100" type="submit" <?= $estoque <= 0 ? 'disabled' : '' ?>><i class="bi bi-bag-plus"></i> Adicionar ao carrinho</button></div>
+                        <div class="col-md-4"><input class="form-control" name="quantidade" type="number" min="1" max="<?= $maxQuantidade ?>" value="1" <?= $semEstoque ? 'disabled' : '' ?>></div>
+                        <div class="col-md-8"><button class="btn btn-brand w-100" type="submit" <?= $semEstoque ? 'disabled' : '' ?>><i class="bi bi-bag-plus"></i> Adicionar ao carrinho</button></div>
                     </form>
                 <?php endif; ?>
             </div>

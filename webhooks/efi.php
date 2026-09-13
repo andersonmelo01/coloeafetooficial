@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/admin/vendas/_pdv.php';
 require_once dirname(__DIR__) . '/includes/EfiService.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -49,9 +50,40 @@ db()->prepare(
 ]);
 $eventId = (int) db()->lastInsertId();
 
+$vendaId = 0;
+$vendaStatus = $status;
+foreach ((array) ($payload['pix'] ?? []) as $pix) {
+    $txidPix = (string) ($pix['txid'] ?? $payload['txid'] ?? '');
+    if ($txidPix === '') {
+        continue;
+    }
+    $vendaPix = db_one("SELECT id FROM vendas WHERE pix_txid = :txid", ['txid' => $txidPix]);
+    if ($vendaPix) {
+        $vendaId = (int) $vendaPix['id'];
+    } elseif (preg_match('/\bPDV(\d+)\b/', $txidPix, $matches)) {
+        $vendaId = (int) $matches[1];
+    }
+    if ($vendaId > 0) {
+        $vendaStatus = (string) ($pix['status'] ?? $status);
+        break;
+    }
+}
+
+$paids = pdv_efi_paid_statuses();
+$processou = false;
+
 if ($pedidoId > 0) {
     efi_apply_paid_order($pedidoId, $status, $payload);
+    $processou = true;
+}
+
+if ($vendaId > 0) {
+    pdv_apply_efi_payment($vendaId, in_array($vendaStatus, $paids, true), $payload);
+    $processou = true;
+}
+
+if ($processou) {
     db()->prepare("UPDATE webhook_eventos SET processado = 1 WHERE id = :id")->execute(['id' => $eventId]);
 }
 
-echo json_encode(['ok' => true, 'pedido_id' => $pedidoId]);
+echo json_encode(['ok' => true, 'pedido_id' => $pedidoId, 'venda_id' => $vendaId]);

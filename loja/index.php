@@ -97,6 +97,8 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
                 <?php
                 $preco = promotion_price($produto);
                 $estoque = (int) ($produto['estoque'] ?? 0);
+                $temEstoqueControl = controle_estoque_habilitado();
+                $semEstoque = $temEstoqueControl && $estoque <= 0;
                 $temPromocao = !empty($produto['promo_titulo']) || !empty($produto['preco_promocional']);
                 ?>
                 <div class="col-sm-6 col-lg-4">
@@ -123,7 +125,7 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
                                         <div class="small text-decoration-line-through text-secondary"><?= money_br((float) $produto['preco']) ?></div>
                                     <?php endif; ?>
                                     <strong class="fs-5 text-danger"><?= money_br($preco) ?></strong>
-                                    <div class="small text-secondary">Estoque: <?= $estoque ?></div>
+                                    <?php if ($temEstoqueControl): ?><div class="small text-secondary">Estoque: <?= $estoque ?></div><?php endif; ?>
                                 </div>
                                 <?php if ($vendasHabilitadas): ?>
                                     <form method="post" action="<?= e(base_url('carrinho/adicionar.php')) ?>">
@@ -132,7 +134,7 @@ $categorias = db_all("SELECT nome, slug FROM categorias WHERE ativo = 1 ORDER BY
                                         <input type="hidden" name="nome" value="<?= e($produto['nome']) ?>">
                                         <input type="hidden" name="preco" value="<?= e((string) $preco) ?>">
                                         <input type="hidden" name="voltar" value="<?= e($_SERVER['REQUEST_URI'] ?? base_url('loja/index.php')) ?>">
-                                        <button class="btn btn-brand" type="submit" <?= $estoque <= 0 ? 'disabled' : '' ?>>
+                                        <button class="btn btn-brand" type="submit" <?= $semEstoque ? 'disabled' : '' ?>>
                                             <i class="bi bi-plus-lg"></i> Adicionar
                                         </button>
                                     </form>

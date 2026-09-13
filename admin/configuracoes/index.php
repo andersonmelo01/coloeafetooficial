@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'loja.vendas_habilitadas' => 'loja',
         'loja.mensagem_catalogo' => 'loja',
         'parceiros.habilitados' => 'parceiros',
+        'pdv.controle_estoque' => 'pdv',
         'fiscal.habilitado' => 'fiscal',
         'fiscal.ambiente' => 'fiscal',
         'fiscal.uf' => 'fiscal',
@@ -87,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $_POST['loja_vendas_habilitadas'] = isset($_POST['loja_vendas_habilitadas']) ? '1' : '0';
     $_POST['parceiros_habilitados'] = isset($_POST['parceiros_habilitados']) ? '1' : '0';
+    $_POST['pdv_controle_estoque'] = isset($_POST['pdv_controle_estoque']) ? '1' : '0';
     $_POST['fiscal_habilitado'] = isset($_POST['fiscal_habilitado']) ? '1' : '0';
     $_POST['fiscal_reforma_tributaria_habilitada'] = isset($_POST['fiscal_reforma_tributaria_habilitada']) ? '1' : '0';
     $_POST['efi_habilitado'] = isset($_POST['efi_habilitado']) ? '1' : '0';
@@ -108,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'loja.vendas_habilitadas' => 'loja_vendas_habilitadas',
         'loja.mensagem_catalogo' => 'loja_mensagem_catalogo',
         'parceiros.habilitados' => 'parceiros_habilitados',
+        'pdv.controle_estoque' => 'pdv_controle_estoque',
         'fiscal.habilitado' => 'fiscal_habilitado',
         'fiscal.ambiente' => 'fiscal_ambiente',
         'fiscal.uf' => 'fiscal_uf',
@@ -170,6 +173,9 @@ require_once dirname(__DIR__, 2) . '/includes/header.php';
             <div class="col-md-4"><label class="form-check"><input class="form-check-input" type="checkbox" name="loja_vendas_habilitadas" <?= loja_vendas_enabled() ? 'checked' : '' ?>> Habilitar vendas na loja</label></div>
             <div class="col-md-4"><label class="form-check"><input class="form-check-input" type="checkbox" name="parceiros_habilitados" <?= app_config('parceiros.habilitados', '0') === '1' ? 'checked' : '' ?>> Mostrar parceiros no site e no chat</label></div>
             <div class="col-md-8"><label class="form-label">Mensagem quando vendas estiverem desabilitadas</label><textarea class="form-control" name="loja_mensagem_catalogo" rows="3"><?= e(loja_catalog_message()) ?></textarea></div>
+
+            <div class="col-12 border-top pt-4"><h2 class="h5">PDV Fácil</h2><p class="text-secondary small">Configurações da venda presencial.</p></div>
+            <div class="col-md-4"><label class="form-check"><input class="form-check-input" type="checkbox" name="pdv_controle_estoque" <?= app_config('pdv.controle_estoque', '1') === '1' ? 'checked' : '' ?>> Controlar estoque nas vendas do PDV</label><div class="form-text">Desmarque para vender sem baixar/validar estoque.</div></div>
 
             <div class="col-12 border-top pt-4"><h2 class="h5">Fiscal / SPED-NFe</h2><p class="text-secondary small">Quando desabilitado, o gestor pode confirmar vendas sem controle fiscal.</p></div>
             <div class="col-md-4"><label class="form-check"><input class="form-check-input" type="checkbox" name="fiscal_habilitado" <?= fiscal_enabled() ? 'checked' : '' ?>> Habilitar fiscal/NF-e</label></div>

@@ -126,6 +126,32 @@ if ($fim !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fim)) {
     $fim = '';
 }
 $entregadores = db_all("SELECT id, nome FROM usuarios WHERE tipo = 'entregador' AND ativo = 1 ORDER BY nome");
+
+$entregasParams = [];
+$entregasWheres = [];
+if ($q !== '') {
+    $entregasWheres[] = '(p.id = :id_busca OR u.nome LIKE :like_q OR p.status LIKE :like_q OR eu.nome LIKE :like_q OR en.status LIKE :like_q)';
+    $entregasParams['id_busca'] = (int) $q;
+    $entregasParams['like_q'] = '%' . $q . '%';
+}
+if ($status !== '') {
+    if ($status === 'sem_entrega') {
+        $entregasWheres[] = 'en.id IS NULL';
+    } else {
+        $entregasWheres[] = 'en.status = :status';
+        $entregasParams['status'] = $status;
+    }
+}
+if ($inicio !== '') {
+    $entregasWheres[] = 'DATE(COALESCE(en.enviado_em, p.criado_em)) >= :inicio';
+    $entregasParams['inicio'] = $inicio;
+}
+if ($fim !== '') {
+    $entregasWheres[] = 'DATE(COALESCE(en.enviado_em, p.criado_em)) <= :fim';
+    $entregasParams['fim'] = $fim;
+}
+$entregasWhere = $entregasWheres ? 'WHERE ' . implode(' AND ', $entregasWheres) : '';
+
 $pedidosPage = paginate_query(
     "SELECT p.*, u.nome AS cliente, en.id AS entrega_id, en.entregador_id, en.status AS entrega_status,
             en.transportadora, en.servico, en.codigo_rastreio AS entrega_rastreio, en.previsao_entrega,
@@ -137,12 +163,9 @@ $pedidosPage = paginate_query(
      LEFT JOIN entregas en ON en.pedido_id = p.id
      LEFT JOIN usuarios eu ON eu.id = en.entregador_id
      LEFT JOIN enderecos e ON e.usuario_id = u.id AND e.principal = 1
-     WHERE (:q = '' OR p.id = :id_busca OR u.nome LIKE :like_q OR p.status LIKE :like_q OR eu.nome LIKE :like_q OR en.status LIKE :like_q)
-       AND (:status = '' OR (:status = 'sem_entrega' AND en.id IS NULL) OR en.status = :status)
-       AND (:inicio = '' OR DATE(COALESCE(en.enviado_em, p.criado_em)) >= :inicio)
-       AND (:fim = '' OR DATE(COALESCE(en.enviado_em, p.criado_em)) <= :fim)
+     {$entregasWhere}
      ORDER BY p.criado_em DESC",
-    ['q' => $q, 'id_busca' => (int) $q, 'like_q' => '%' . $q . '%', 'status' => $status, 'inicio' => $inicio, 'fim' => $fim]
+    $entregasParams
 );
 $pedidos = $pedidosPage['rows'];
 

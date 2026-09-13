@@ -34,6 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $next = $_SESSION['redirect_after_login'] ?? null;
         unset($_SESSION['redirect_after_login']);
+        if ($next && str_starts_with((string) $next, 'admin/') && ($usuario['tipo'] ?? '') !== 'admin') {
+            $next = null;
+        }
         $homeByType = [
             'admin' => 'admin/index.php',
             'cliente' => 'cliente/index.php',

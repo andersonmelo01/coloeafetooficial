@@ -42,7 +42,7 @@ $_SESSION['carrinho'][$id] ??= [
 ];
 
 $_SESSION['carrinho'][$id]['quantidade'] += $quantidade;
-if ($estoque > 0) {
+if (controle_estoque_habilitado() && $estoque > 0) {
     $_SESSION['carrinho'][$id]['quantidade'] = min($_SESSION['carrinho'][$id]['quantidade'], $estoque);
 }
 flash('success', 'Produto adicionado ao carrinho.');

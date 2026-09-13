@@ -1283,3 +1283,428 @@ a{ transition: all .25s ease; }
   }
   .afeto-cta-box{ padding: 2.5rem 1.2rem; }
 }
+
+/* PDV - Vendas presenciais */
+.metric-label{ font-size:.78rem; color:#6c757d; margin-bottom:.25rem; text-transform:uppercase; letter-spacing:.03em; }
+.text-brand-price{ color:var(--brand-color, #b5838d); }
+
+.pdv-card-product{
+  background:#fff;
+  border:1px solid #e9ecef;
+  border-radius:.5rem;
+  padding:.75rem;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+.pdv-card-product:hover{
+  border-color:#b5838d;
+}
+.pdv-card-product-disabled{
+  opacity:.65;
+  pointer-events:none;
+}
+.pdv-card-product-disabled:hover{ border-color:#e9ecef; }
+.pdv-product-img{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  border-radius:.4rem;
+}
+.pdv-product-img-empty{
+  background:#f8f9fa;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#adb5bd;
+  font-size:1.6rem;
+}
+.pdv-product-name{
+  font-size:.88rem;
+  font-weight:600;
+  margin:.5rem 0 .25rem;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+.pdv-product-meta{
+  margin-top:auto;
+  display:flex;
+  flex-direction:column;
+  gap:.15rem;
+}
+.pdv-product-price{
+  color:var(--brand-color, #b5838d);
+  font-weight:700;
+  font-size:.92rem;
+}
+.pdv-product-old-price{
+  text-decoration:line-through;
+  color:#adb5bd;
+  font-size:.78rem;
+}
+
+/* PDV - Tela caixa / grid */
+.pdv-grid{ row-gap: 1rem; }
+.pdv-quick-add .btn{ padding: .55rem .75rem; font-weight: 600; }
+
+/* PDV - Cupom / impressão */
+.cupom-wrap{ max-width: 420px; margin: 0 auto; }
+.cupom-paper{
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: .4rem;
+  padding: 1.25rem;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #222;
+}
+.cupom-header{ text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 1rem; margin-bottom: 1rem; }
+.cupom-brand{ display: flex; flex-direction: column; align-items: center; gap:.5rem; font-size: 1.1rem; margin-bottom:.5rem; }
+.cupom-brand img{ height: 40px; width: auto; }
+.cupom-fiscal-badge{
+  display: inline-block;
+  background: var(--brand-color, #b5838d);
+  color: #fff;
+  padding:.25rem.75rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size:.88rem;
+  letter-spacing:.04em;
+  margin-top:.5rem;
+}
+.cupom-fiscal-badge.cupom-nao-fiscal{ background: #6c757d; }
+.cupom-meta{ font-size:.78rem; color: #555; margin-top:.1rem; }
+.cupom-title{ font-weight: 700; font-size: 1rem; text-align: center; margin-bottom:.35rem; }
+.cupom-section-title{
+  font-size:.68rem;
+  text-transform: uppercase;
+  letter-spacing:.08em;
+  color:#999;
+  font-weight:700;
+  margin-bottom:.35rem;
+}
+.cupom-tbl{ font-size:.82rem; }
+.cupom-tbl td,
+.cupom-tbl th{
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  vertical-align: top;
+}
+.cupom-tbl td:nth-child(2),
+.cupom-tbl th:nth-child(2){ white-space: nowrap; }
+.cupom-tbl thead th{
+  font-size:.68rem;
+  text-transform: uppercase;
+  letter-spacing:.05em;
+  color:#999;
+  font-weight:700;
+  border:0;
+}
+.cupom-total-line{ display:flex; justify-content:space-between; padding:.12rem 0; font-size:.9rem; }
+.cupom-total-final{
+  border-top:2px solid #e0e0e0;
+  margin-top:.35rem;
+  padding-top:.5rem;
+  font-weight:700;
+  font-size:1.02rem;
+  color: var(--brand-color, #b5838d);
+}
+.cupom-total-final span:last-child{ font-size:1.08rem; }
+.cupom-payments .cupom-pay-line{
+  font-size:.88rem;
+  padding:.18rem 0;
+  border-bottom:1px dashed #f0f0f0;
+}
+.cupom-pay-line .cupom-status{
+  font-size:.66rem;
+  font-weight:600;
+  text-transform: uppercase;
+  letter-spacing:.04em;
+  background:#fff3cd;
+  color:#856404;
+  border-radius:999px;
+  padding:.08rem .45rem;
+}
+.cupom-pend-total td{
+  border-top:2px solid #e0e0e0 !important;
+  font-weight:700;
+  color: var(--brand-color, #b5838d);
+}
+.cupom-totals .fw-bold{ color: var(--brand-color, #b5838d); }
+.cupom-payments{ font-size:.9rem; }
+.pix-copiaecola{
+  word-break: break-all;
+  background: #f8f9fa;
+  border: 1px dashed #ddd;
+  padding:.65rem;
+  border-radius:.3rem;
+  font-size:.78rem;
+}
+.cupom-footer{ font-size:.82rem; color: #555; }
+.cupom-footer hr{ border:0; border-top:2px dashed #e0e0e0; margin:.9rem 0 .6rem; }
+
+@media print {
+  .cupom-page{ background: #fff; }
+  .cupom-page nav,
+  .cupom-page .mobile-tabbar,
+  .cupom-page .chat-widget,
+  .cupom-page .d-print-none{ display: none !important; }
+  .cupom-paper{ box-shadow: none; border: 0; padding: .4rem; max-width: 100%; }
+  .cupom-paper, .cupom-paper *{ font-size-adjust: none; }
+}
+
+/* Chat - Drawer moderno */
+.chat-widget{
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 1090;
+}
+.chat-toggle{
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--brand-color, #b5838d);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .15rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+  cursor: pointer;
+  font-size:.7rem;
+}
+.chat-toggle i{ font-size: 1.35rem; }
+.chat-panel{
+  display: none;
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: min(400px, 96vw);
+  max-height: 72vh;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,.22);
+  flex-direction: column;
+  overflow: hidden;
+}
+.chat-widget.chat-open .chat-panel{ display: flex; }
+.chat-widget.chat-open .chat-toggle{ display: none; }
+.chat-header{
+  background: var(--brand-color, #b5838d);
+  color: #fff;
+  padding:.85rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+.chat-close{ background:none; border:none; color:#fff; font-size:1rem; }
+.chat-body{
+  flex: 1;
+  overflow-y: auto;
+  padding:.9rem 1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.65rem;
+  max-height: 44vh;
+}
+.chat-message{
+  max-width: 82%;
+  padding:.65rem.85rem;
+  border-radius:.85rem;
+  font-size:.88rem;
+  line-height: 1.35;
+}
+.chat-message.bot{
+  background: #f4f4f6;
+  color: #333;
+  align-self: flex-start;
+}
+.chat-message.user{
+  background: var(--brand-color, #b5838d);
+  color: #fff;
+  align-self: flex-end;
+}
+.chat-suggestions{
+  display: flex;
+  flex-wrap: wrap;
+  gap:.35rem;
+  padding:.5rem 1rem;
+}
+.chat-suggestion{
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  padding:.35rem.7rem;
+  border-radius: 999px;
+  font-size:.8rem;
+  cursor: pointer;
+  color: var(--brand-color, #b5838d);
+}
+.chat-suggestion:hover{ background: #fff4f6; }
+.chat-input-area{
+  border-top: 1px solid #eee;
+  padding:.65rem 1rem;
+  display: flex;
+  gap:.5rem;
+  background: #fafafa;
+}
+.chat-input-area input{
+  flex: 1;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  padding:.45rem.85rem;
+  font-size:.88rem;
+}
+
+/* Footer identidade visual */
+.site-footer{
+  background: #24262b;
+  color: #e0e1e5;
+  padding: 2.8rem 0 1rem;
+  border-top: 3px solid var(--brand-color, #b5838d);
+}
+.footer-brand{
+  display: inline-flex;
+  align-items: center;
+  gap:.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+.footer-brand img{ height: 44px; border-radius: .4rem; }
+.site-footer h2{
+  font-size:.82rem;
+  text-transform: uppercase;
+  letter-spacing:.04em;
+  color: #a1a2a6;
+  margin-bottom:.85rem;
+  font-weight: 600;
+}
+.footer-copy{ font-size:.9rem; color: #c5c6ca; margin-top:.85rem; max-width: 340px; }
+.footer-status{
+  display: inline-block;
+  margin-top:.85rem;
+  background: rgba(255,255,255,.08);
+  padding:.3rem.75rem;
+  border-radius: 999px;
+  font-size:.78rem;
+}
+.site-footer a{
+  display: block;
+  color: #c5c6ca;
+  text-decoration: none;
+  padding:.25rem 0;
+  font-size:.88rem;
+}
+.site-footer a:hover{ color: var(--afeto-pessego, #ffb4a2); }
+.footer-contact{
+  display: inline-flex;
+  align-items: center;
+  gap:.45rem;
+  margin-top:.35rem;
+}
+.footer-bottom{
+  border-top: 1px solid rgba(255,255,255,.12);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size:.78rem;
+  color: #a1a2a6;
+}
+
+/* Footer: corrige .site-footer a (display block) no footer-brand */
+.site-footer .footer-brand{ display:inline-flex; }
+.site-footer a.footer-contact{ font-weight: 500; }
+
+/* Chat drawer - identidade do assistente */
+.chat-header-info{ display:flex; align-items:center; gap:.65rem; }
+.chat-avatar{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:rgba(255,255,255,.18);
+  font-size:1.05rem;
+  flex:0 0 auto;
+}
+.chat-header-title{ font-size:.92rem; font-weight:700; line-height:1.15; }
+.chat-header-sub{
+  font-size:.72rem;
+  font-weight:400;
+  opacity:.92;
+  display:flex;
+  align-items:center;
+  gap:.35rem;
+}
+.chat-status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#7edfa5;
+  animation: chat-pulse 1.6s ease-out infinite;
+}
+@keyframes chat-pulse{
+  0%{ box-shadow:0 0 0 0 rgba(126,223,165,.45); }
+  70%{ box-shadow:0 0 0 6px rgba(126,223,165,0); }
+  100%{ box-shadow:0 0 0 0 rgba(126,223,165,0); }
+}
+.chat-typing{
+  display:flex;
+  gap:.3rem;
+  align-items:center;
+  padding:.35rem 1rem .1rem;
+}
+.chat-typing span{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#c7c7ce;
+  animation: chat-bounce 1.2s ease-in-out infinite;
+}
+.chat-typing span:nth-child(2){ animation-delay:.15s; }
+.chat-typing span:nth-child(3){ animation-delay:.3s; }
+@keyframes chat-bounce{
+  0%,60%,100%{ transform:translateY(0); opacity:.5; }
+  30%{ transform:translateY(-4px); opacity:1; }
+}
+[hidden]{ display:none !important; }
+
+/* Ações (botões) dentro das mensagens do bot */
+.chat-message-text{ white-space: pre-line; }
+.chat-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+  margin-top:.6rem;
+}
+.chat-action{
+  display:inline-block;
+  background:var(--brand-color, #b5838d);
+  color:#fff;
+  font-size:.8rem;
+  font-weight:600;
+  padding:.35rem .8rem;
+  border-radius:999px;
+  text-decoration:none;
+}
+.chat-action:hover{ filter:brightness(1.06); color:#fff; }
+
+@media (max-width: 767px){
+  .chat-panel{
+    right:.5rem;
+    left:.5rem;
+    bottom:.5rem;
+    width:auto;
+    max-height:80vh;
+  }
+}

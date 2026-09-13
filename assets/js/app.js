@@ -124,6 +124,7 @@ const chatPanel = document.getElementById('afetoChatPanel');
 const chatBody = document.getElementById('afetoChatBody');
 const chatInput = document.getElementById('afetoChatInput');
 const chatSend = document.getElementById('afetoChatSend');
+const chatTyping = document.getElementById('afetoChatTyping');
 const chatConfigElement = document.getElementById('afetoChatConfig');
 
 if (chatWidget && chatToggle && chatClose && chatPanel && chatBody && chatInput && chatSend) {
@@ -136,52 +137,52 @@ if (chatWidget && chatToggle && chatClose && chatPanel && chatBody && chatInput 
         }
     }
 
-    const partners = Array.isArray(chatConfig.partners) ? chatConfig.partners : [];
-    const hasPartners = partners.length > 0;
-    const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const intents = Array.isArray(chatConfig.intencoes) ? chatConfig.intencoes.map((intent) => {
+        let matcher = null;
+        if (typeof intent.matcher === 'string' && intent.matcher) {
+            try {
+                matcher = new RegExp(intent.matcher, 'i');
+            } catch (error) {
+                matcher = null;
+            }
+        }
+        return { matcher, text: String(intent.text || ''), acoes: Array.isArray(intent.acoes) ? intent.acoes : [] };
+    }) : [];
+    const fallback = String(chatConfig.resposta_fallback || '');
 
-    const responses = [
-        { matcher: /como funciona.*doula|doula/i, text: 'A nossa doula oferece apoio antes, durante e depois do parto. Ela ajuda com preparação emocional, presença no parto, orientação prática para amamentação e apoio à família no pós-parto. É um acolhimento humano que traz mais segurança e confiança.' },
-        { matcher: /quais serviços|serviços|servicos|o que vocês oferecem|oferecem/i, text: hasPartners ? 'Oferecemos atendimento materno, suporte em amamentação e pós-parto, taping pós-parto, cuidados de furinho humanizado e serviço de doula. Também indicamos parceiros confiáveis e temos uma curadoria de produtos para cada fase da maternidade.' : 'Oferecemos atendimento materno, suporte em amamentação e pós-parto, taping pós-parto, cuidados de furinho humanizado e serviço de doula. Também temos uma curadoria de produtos para cada fase da maternidade.' },
-        { matcher: /agendar|agenda|marcar|atendimento/i, text: 'Para agendar, você pode enviar uma mensagem no WhatsApp, falar direto com nossa equipe e escolher o melhor dia e horário. Também ajudamos a definir o serviço mais adequado para sua fase materna.' },
-        { matcher: /amamenta|amamentação|peg a|mama/i, text: 'No apoio à amamentação, trabalhamos para melhorar a pega, reduzir desconfortos e aumentar a segurança da mãe. Também oferecemos orientações sobre rotina, conforto do bebê e suporte à família para o momento de amamentar.' },
-        { matcher: /pós-?parto|pos-?parto|recuperação|recuperacao/i, text: 'O pós-parto pode ser um período desafiador. Nosso suporte inclui orientação sobre cuidados do bebê, autocuidado da mãe, organização da rotina e acolhimento emocional para você e sua família.' },
-        { matcher: /furinho|umbigo|cuidado.*umbigo/i, text: 'O cuidado com o furinho humanizado é feito com atenção e delicadeza. Orientamos limpeza, sinais de alerta e como deixar esse momento mais tranquilo para mãe e bebê.' },
-        { matcher: /produto|loja|catalogo|produtos/i, text: 'Temos uma curadoria de produtos para amamentação, pós-parto e bebê. Você pode conhecer o catálogo online e receber indicações de itens que combinam com sua fase e suas necessidades.' },
-        { matcher: /onde|local|atendimento presencial|online/i, text: 'Nosso atendimento é pensado para acolher você com flexibilidade, oferecendo suporte presencial quando possível e orientação online quando for melhor para sua rotina.' },
-        { matcher: /preço|valor|custo|quanto custa/i, text: 'Os valores variam conforme o serviço e o tempo de atendimento. Para uma proposta personalizada, fale conosco pelo WhatsApp e podemos indicar o pacote mais adequado para você.' },
-        { matcher: /whatsapp|contato|falar/i, text: 'O melhor caminho para contato imediato é pelo WhatsApp. Lá você pode tirar dúvidas, agendar atendimento ou pedir orientação rápida com nossa equipe materna.' },
-    ];
-
-    if (hasPartners) {
-        const partnerKeywords = partners.flatMap((partner) => [
-            'parceir',
-            partner.name || '',
-            ...(Array.isArray(partner.keywords) ? partner.keywords : []),
-        ]).filter(Boolean);
-        const partnerMatcher = new RegExp(partnerKeywords.map(escapeRegExp).join('|'), 'i');
-        const partnerText = partners.map((partner) => {
-            const contact = partner.whatsapp_url ? ' Você também pode falar diretamente pelo WhatsApp informado no perfil.' : '';
-            return `${partner.name} atua como ${partner.role}. ${partner.summary}${contact}`;
-        }).join('\n\n');
-        responses.push({ matcher: partnerMatcher, text: partnerText });
-    }
-
-    const appendMessage = (text, type) => {
+    const appendMessage = (text, type, acoes) => {
         const message = document.createElement('div');
         message.className = `chat-message ${type}`;
-        message.textContent = text;
+        const content = document.createElement('div');
+        content.className = 'chat-message-text';
+        content.textContent = text;
+        message.appendChild(content);
+        if (type === 'bot' && acoes && acoes.length) {
+            const actions = document.createElement('div');
+            actions.className = 'chat-actions';
+            acoes.forEach((acao) => {
+                const label = acao && acao.label ? acao.label : '';
+                const url = acao && acao.url ? acao.url : '#';
+                if (!label) return;
+                const link = document.createElement('a');
+                link.className = 'chat-action';
+                link.href = url;
+                link.textContent = label;
+                actions.appendChild(link);
+            });
+            message.appendChild(actions);
+        }
         chatBody.appendChild(message);
         chatBody.scrollTop = chatBody.scrollHeight;
     };
 
     const getAnswer = (text) => {
-        for (const response of responses) {
-            if (response.matcher.test(text)) {
-                return response.text;
+        for (const intent of intents) {
+            if (intent.matcher && intent.matcher.test(text)) {
+                return intent;
             }
         }
-        return 'Estou aqui para acolher! Se quiser, escreva sua dúvida com palavras como “amamentação”, “pós-parto”, “doula” ou “serviço”, e eu te respondo com mais detalhes.';
+        return { matcher: null, text: fallback, acoes: [] };
     };
 
     const showPanel = (open) => {
@@ -202,14 +203,29 @@ if (chatWidget && chatToggle && chatClose && chatPanel && chatBody && chatInput 
     chatToggle.addEventListener('click', () => showPanel(!chatWidget.classList.contains('chat-open')));
     chatClose.addEventListener('click', () => showPanel(false));
 
+    const scrollChat = () => {
+        chatBody.scrollTop = chatBody.scrollHeight;
+    };
+
+    const showTyping = (visible) => {
+        if (!chatTyping) return;
+        chatTyping.hidden = !visible;
+        if (visible) {
+            scrollChat();
+        }
+    };
+
     const sendChat = () => {
         const value = chatInput.value.trim();
         if (!value) return;
+        const answer = getAnswer(value);
         appendMessage(value, 'user');
         chatInput.value = '';
+        showTyping(true);
         setTimeout(() => {
-            appendMessage(getAnswer(value), 'bot');
-        }, 650);
+            showTyping(false);
+            appendMessage(answer.text, 'bot', answer.acoes);
+        }, 700);
     };
 
     const chatSuggestions = document.querySelectorAll('.chat-suggestion');
@@ -226,6 +242,12 @@ if (chatWidget && chatToggle && chatClose && chatPanel && chatBody && chatInput 
         if (event.key === 'Enter') {
             event.preventDefault();
             sendChat();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && chatWidget.classList.contains('chat-open')) {
+            showPanel(false);
         }
     });
 }
