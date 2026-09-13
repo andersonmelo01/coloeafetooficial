@@ -42,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'cliente' => 'cliente/index.php',
             'entregador' => 'entregador/index.php',
         ];
-        header('Location: ' . ($next ?: base_url($homeByType[$usuario['tipo']] ?? 'cliente/index.php')));
+        $destino = base_url($next ?: ($homeByType[$usuario['tipo']] ?? 'cliente/index.php'));
+        header('Location: ' . $destino);
         exit;
     }
 

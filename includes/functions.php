@@ -9,14 +9,35 @@ require_once dirname(__DIR__) . '/conexao.php';
 
 function base_url(string $path = ''): string
 {
-    $script = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
-    $root = '';
+    static $root = null;
+    if ($root === null) {
+        $root = '';
 
-    if (preg_match('#^(.*?/ColoAfeto)(/|$)#i', $script, $matches)) {
-        $root = $matches[1];
+        $appDir = rtrim(str_replace('\\', '/', dirname(__DIR__)), '/');
+        $docRoot = rtrim(str_replace('\\', '/', (string) ($_SERVER['DOCUMENT_ROOT'] ?? '')), '/');
+
+        if ($docRoot !== '') {
+            if (strcasecmp($docRoot, $appDir) === 0) {
+                $root = '';
+            } elseif (stripos($appDir, $docRoot . '/') === 0) {
+                $root = substr($appDir, strlen($docRoot));
+            }
+        }
+
+        if ($root === '') {
+            $script = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+            if (preg_match('#^(.*?/ColoAfeto)(/|$)#i', $script, $matches)) {
+                $root = $matches[1];
+            }
+        }
+
+        $root = rtrim($root, '/');
+        if ($root !== '' && str_starts_with($root, '/') === false) {
+            $root = '/' . $root;
+        }
     }
 
-    return rtrim($root, '/') . '/' . ltrim($path, '/');
+    return $root . '/' . ltrim($path, '/');
 }
 
 function asset_url(string $path): string

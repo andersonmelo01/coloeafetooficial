@@ -19,6 +19,13 @@ const DB_USER = 'root';
 const DB_PASS = 'admin';
 const DB_CHARSET = 'utf8mb4';
 
+/*const DB_HOST = 'localhost';
+const DB_NAME = 'colo_afeto';
+const DB_USER = 'colo_afeto_user';
+const DB_PASS = 'And95079@@';
+const DB_CHARSET = 'utf8mb4';*/
+
+
 function db(): PDO
 {
     static $pdo = null;
