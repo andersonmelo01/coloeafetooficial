@@ -67,7 +67,7 @@ export const AjustesScreen: React.FC = () => {
             label="Endereço do PDV"
             value={url}
             onChangeText={setUrl}
-            placeholder="https://www.coloafetooficial.com.br/ColoAfeto/api/pdv"
+            placeholder="https://coloeafetooficial.com.br/api/pdv"
             autoCapitalize="none"
             keyboardType="url"
           />
@@ -78,7 +78,7 @@ export const AjustesScreen: React.FC = () => {
             small
           />
           <Text style={styles.hint}>
-            Em produção use https://www.coloafetooficial.com.br/ColoAfeto/api/pdv
+            Em produção use https://coloeafetooficial.com.br/api/pdv
           </Text>
         </View>
 

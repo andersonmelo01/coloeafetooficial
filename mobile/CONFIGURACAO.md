@@ -1,7 +1,13 @@
-# ColoAfeto PDV — Guia Completo de Configuração
+# ColoAfeto PDV — Configuração, APK e Revisão de Produção
 
-Guia passo-a-passo para instalar, configurar e atualizar o sistema PDV mobile
-da ColoAfeto em produção.
+Guia passo a passo para validar o backend em produção, gerar um APK instalável
+e atualizar o sistema PDV mobile da ColoAfeto.
+
+**Situação verificada em 15/09/2026:** o app usa Expo SDK 57, React Native
+0.86.3 e comunica-se com a API em `https://coloeafetooficial.com.br/api/pdv`.
+O caminho recomendado para distribuição é o EAS Build. O build Android nativo
+local também existe, mas o `release` atual usa a chave de debug e não deve ser
+distribuído como APK de produção sem configurar uma keystore própria.
 
 ---
 
@@ -154,7 +160,7 @@ O projeto inteiro vive numa pasta chamada `ColoAfeto`. O app PDV é um submódul
 dentro dela:
 
 ```
-/var/www/html/ColoAfeto/              ← DocumentRoot do projeto
+/var/www/html/coloeafetooficial/      ← DocumentRoot do projeto
 ├── conexao.php                       ← Configuração do banco (DB_HOST, DB_USER, etc.)
 ├── includes/
 │   ├── functions.php                 ← Funções globais (db(), base_url(), app_config...)
@@ -197,23 +203,30 @@ const DB_CHARSET = 'utf8mb4';
 
 ### 4.3 Configurar o Virtual Host do Apache
 
+O VirtualHost de produção publica a pasta do projeto diretamente na raiz do
+domínio. Portanto, não acrescente `/ColoAfeto` à URL da API:
+
 ```apache
+<IfModule mod_ssl.c>
 <VirtualHost *:443>
-    ServerName www.coloafetooficial.com.br
-    DocumentRoot /var/www/html
+  ServerName coloeafetooficial.com.br
+  ServerAlias www.coloeafetooficial.com.br
+  DocumentRoot /var/www/html/coloeafetooficial
+  DirectoryIndex index.php index.html
 
-    SSLEngine on
-    SSLCertificateFile    /etc/letsencrypt/live/www.coloafetooficial.com.br/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/www.coloafetooficial.com.br/privkey.pem
+  <Directory /var/www/html/coloeafetooficial>
+    Options -Indexes +FollowSymLinks
+    AllowOverride All
+    Require all granted
+  </Directory>
 
-    <Directory /var/www/html>
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/coloafeto-error.log
-    CustomLog ${APACHE_LOG_DIR}/coloafeto-access.log combined
+  ErrorLog ${APACHE_LOG_DIR}/coloeafetooficial-error.log
+  CustomLog ${APACHE_LOG_DIR}/coloeafetooficial-access.log combined
+  Include /etc/letsencrypt/options-ssl-apache.conf
+  SSLCertificateFile /etc/letsencrypt/live/coloeafetooficial.com.br/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/coloeafetooficial.com.br/privkey.pem
 </VirtualHost>
+</IfModule>
 ```
 
 Depois reinicie o Apache:
@@ -246,9 +259,9 @@ sudo systemctl restart apache2
 
 ```bash
 # Testar login (substitua credenciais)
-curl -X POST https://www.coloafetooficial.com.br/ColoAfeto/api/pdv/login.php \
+curl -X POST https://coloeafetooficial.com.br/api/pdv/login.php \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@coloafeto.local","senha":"admin123"}'
+  -d '{"email":"admin@coloafeto.loca","senha":"admin123"}'
 
 # Deve retornar JSON com { "ok": true, "token": "abc123...", ... }
 ```
@@ -289,36 +302,53 @@ Escaneie o QR Code com o **Expo Go** no celular (mesma rede Wi-Fi).
 ### 5.4 Gerar APK de produção (EAS Build)
 
 ```bash
-# Instalar EAS CLI (se ainda não tiver)
-npm install -g eas-cli
-
-# Fazer login na Expo
-eas login
-
-# Configurar projeto (primeira vez)
-eas build:configure
-
-# Gerar build Android (profile: production)
-eas build -p android --profile production
+npm ci
+npx tsc --noEmit
+npx expo-doctor
+npx eas-cli login
+npx eas-cli build -p android --profile production
 ```
 
-O APK/ABB será disponibilizado para download no painel da Expo.
+O arquivo `mobile/eas.json` fixa o perfil `production` como distribuição interna
+em formato APK. O EAS solicitará as credenciais Android na primeira execução;
+aceite o gerenciamento de uma keystore pelo EAS ou informe a keystore oficial
+já existente. Nunca versionar keystores, tokens ou senhas.
+
+Ao terminar, abra a URL informada pelo EAS, baixe o `.apk` e transfira-o para o
+smartphone. Autorize a instalação pelo navegador ou gerenciador de arquivos,
+se o Android solicitar. Depois da instalação, confirme o endereço
+`https://coloeafetooficial.com.br/api/pdv`, faça login, abra o
+caixa e execute uma venda de teste de baixo valor.
 
 ### 5.5 Gerar AAB (para Google Play)
 
-O profile `production` no `eas.json` deve gerar AAB por padrão:
+O perfil atual é para instalação direta. Para publicar na Google Play, crie um
+perfil separado no `eas.json` com `buildType: "app-bundle"` e gere um `.aab`.
 
-```json
-{
-  "build": {
-    "production": {
-      "android": {
-        "buildType": "app-bundle"
-      }
-    }
-  }
-}
+### 5.6 Build local opcional
+
+Para gerar localmente, instale Android Studio, JDK 17, Android SDK, NDK e CMake
+compatíveis com o projeto:
+
+```bash
+cd mobile/android
+./gradlew assembleRelease       # Linux/macOS
+gradlew.bat assembleRelease     # Windows
 ```
+
+O APK será gravado em `mobile/android/app/build/outputs/apk/release/`. Se
+aparecer `LLVM ERROR: out of memory` ou erro informando que o arquivo de
+paginação é pequeno, aumente o arquivo de paginação do Windows e reduza os
+workers do Gradle antes de tentar novamente. Esse erro é de recurso da máquina,
+não de conectividade com a VPS. O build local também não deve ser distribuído
+enquanto `android/app/build.gradle` continuar usando `signingConfigs.debug` no
+tipo `release`.
+
+### 5.7 Limite do APK
+
+O APK contém o cliente mobile, mas não contém banco de dados nem backend. Ele
+depende da VPS, do certificado HTTPS válido e da API PHP publicada no caminho
+de produção acima.
 
 ---
 
@@ -330,7 +360,7 @@ O app aponta para a URL de produção por padrão em `src/api/client.ts`:
 
 ```ts
 export const DEFAULT_API_URL =
-  'https://www.coloafetooficial.com.br/ColoAfeto/api/pdv';
+  'https://coloeafetooficial.com.br/api/pdv';
 ```
 
 > **Se o domínio ou caminho for diferente**, altere esta constante antes do build.
@@ -342,10 +372,14 @@ O app salva a URL da API em **SecureStore** (iOS Keychain / Android Keystore).
 Para trocar:
 
 1. Na tela de **Login**, toque em **"Configurar endereço do servidor"**
-2. Informe o novo endereço (ex.: `https://www.coloafetooficial.com.br/ColoAfeto/api/pdv`)
+2. Informe o novo endereço (ex.: `https://coloeafetooficial.com.br/api/pdv`)
 3. Faça login — a URL fica salva automaticamente
 
 Ou, após login, vá em **Ajustes** (aba inferior) → campo "Endereço do PDV" → Salvar.
+
+Em produção, use somente uma URL `https://`. A tela atualmente salva a URL
+informada sem validar o esquema; não informe `http://` nem use um endereço de
+rede local no APK distribuído.
 
 ### 6.3 Credenciais de acesso
 
@@ -372,7 +406,7 @@ Após deploy, teste o fluxo completo:
 
 ```bash
 # 1. Login
-curl -s -X POST https://www.coloafetooficial.com.br/ColoAfeto/api/pdv/login.php \
+curl -s -X POST https://coloeafetooficial.com.br/api/pdv/login.php \
   -H "Content-Type: application/json" \
   -d '{"email":"SEU_EMAIL","senha":"SUA_SENHA"}' | jq .
 
@@ -380,11 +414,11 @@ curl -s -X POST https://www.coloafetooficial.com.br/ColoAfeto/api/pdv/login.php 
 TOKEN="cole_o_token_aqui"
 
 # 3. Buscar produtos
-curl -s "https://www.coloafetooficial.com.br/ColoAfeto/api/pdv/produtos.php" \
+curl -s "https://coloeafetooficial.com.br/api/pdv/produtos.php" \
   -H "Authorization: Bearer $TOKEN" | jq .
 
 # 4. Verificar dados do usuário
-curl -s "https://www.coloafetooficial.com.br/ColoAfeto/api/pdv/me.php" \
+curl -s "https://coloeafetooficial.com.br/api/pdv/me.php" \
   -H "Authorization: Bearer $TOKEN" | jq .
 ```
 
@@ -439,7 +473,7 @@ login novamente.
 
 | Aspecto | Implementação |
 |---------|---------------|
-| Transporte | HTTPS obrigatório (app recusa HTTP) |
+| Transporte | URL padrão em HTTPS; URL personalizada deve ser informada em HTTPS |
 | Token | SHA-256 hash no banco; raw só em memória/SecureStore |
 | Armazenamento | iOS: Keychain · Android: Keystore (via expo-secure-store) |
 | Senhas | bcrypt no banco (`senha_hash`) |
@@ -453,9 +487,39 @@ login novamente.
 ### App não conecta ao servidor
 
 - Verifique se a URL está correta (barra final não é necessária)
-- Confirme que HTTPS está habilitado (o app recusa HTTP em produção)
+- Confirme que HTTPS está habilitado; a URL personalizada não é validada pelo app
 - Teste com `curl` isolado para confirmar que a API responde
 - Verifique se o CORS não está bloqueando (teste no browser: acessar a URL direto)
+
+### `login.php` retorna "Metodo nao permitido."
+
+Esse retorno é esperado quando a URL é aberta diretamente no navegador. O
+navegador envia uma requisição `GET`, mas o endpoint de login aceita somente
+`POST` com JSON contendo `email` e `senha`. A resposta HTTP esperada nesse caso
+é `405 Method Not Allowed`.
+
+Teste o método correto pelo terminal, sem usar credenciais reais:
+
+```bash
+curl -i -X POST https://coloeafetooficial.com.br/api/pdv/login.php \
+  -H "Content-Type: application/json" \
+  -d '{"admin@coloafeto.local":"","admin123":""}'
+```
+
+Uma resposta `400` informando que e-mail e senha são obrigatórios confirma que
+a rota recebeu o `POST` corretamente. Para autenticar, substitua os campos por
+um usuário administrativo autorizado ao módulo de vendas.
+
+### Identidade e assinatura do Android
+
+- O pacote atual é `com.anonymous.coloafetopdv`, definido em `app.json` e no
+  projeto Android. Defina um identificador definitivo antes de publicar na
+  Google Play; mudar esse valor depois cria um aplicativo diferente para o
+  Android.
+- O build local `release` usa a assinatura de debug. Para distribuição, use o
+  EAS com uma keystore gerenciada ou configure uma keystore própria no Gradle.
+- Não distribua um APK sem testar a instalação, login, abertura de caixa, venda,
+  cancelamento e envio de cupom contra a API HTTPS de produção.
 
 ### Login retorna 403 "sem permissão"
 

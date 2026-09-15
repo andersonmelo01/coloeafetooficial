@@ -2,7 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 
 const TOKEN_KEY = 'pdv_mobile_token';
 const URL_KEY = 'pdv_mobile_api_url';
-export const DEFAULT_API_URL = 'https://www.coloafetooficial.com.br/ColoAfeto/api/pdv';
+export const DEFAULT_API_URL = 'https://coloeafetooficial.com.br/api/pdv';
 
 export class ApiError extends Error {
   status: number;

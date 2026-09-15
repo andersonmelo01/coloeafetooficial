@@ -41,7 +41,7 @@ Backend (fora do mobile): `ColoAfeto/api/pdv/*.php`
 - VPS com **Ubuntu + Apache2** e PHP 8.x (mod_rewrite ativo)
 - MariaDB/MySQL com o banco do ColoAfeto já importado (é o mesmo banco usado
   pelo site e pelo PDV web; o app NÃO cria/moda schema)
-- O backend deve estar publicado em `https://www.coloafetooficial.com.br/ColoAfeto/api/pdv/`
+- O backend deve estar publicado em `https://coloeafetooficial.com.br/api/pdv/`
 
 > A base usada em produção é o banco **existente** do PDV web — o app só lê/escreve
 > através da API PHP acima, seguindo as mesmas tabelas/regras.
@@ -60,7 +60,7 @@ npx tsc --noEmit                # deve terminar sem erros (gate de qualidade)
 npx expo start                  # rodar em desenvolvimento (QR Code no Expo Go)
 ```
 
-Gerar APK de produção (EAS):
+Gerar APK instalável de produção (EAS; o perfil está em `eas.json`):
 
 ```bash
 npx eas-cli build -p android --profile production
@@ -70,15 +70,16 @@ npx eas-cli build -p android --profile production
 
 ## 4. Apontando para a API de PRODUÇÃO
 
-Por padrão o app usa `DEFAULT_API_URL` em `src/api/client.ts`
-(`http://192.168.1.100/ColoAfeto/api/pdv` — apenas para desenvolvimento local).
+Por padrão o app usa `DEFAULT_API_URL` em `src/api/client.ts`, apontando para a
+API HTTPS de produção. Para desenvolvimento local, informe o endereço da API na
+tela de login ou em Ajustes.
 
 Em produção **não é preciso recompilar**: você informa o endereço do servidor
 na **tela de Login** (campo "Endereço do servidor"), que é salvo no SecureStore
 do aparelho. O app passa a falar com:
 
 ```
-https://www.coloafetooficial.com.br/ColoAfeto/api/pdv
+https://coloeafetooficial.com.br/api/pdv
 ```
 
 Para que todos os aparelhos já venham configurados com produção, altere a constante:
@@ -86,7 +87,7 @@ Para que todos os aparelhos já venham configurados com produção, altere a con
 ```ts
 // src/api/client.ts
 export const DEFAULT_API_URL =
-  'https://www.coloafetooficial.com.br/ColoAfeto/api/pdv';
+  'https://coloeafetooficial.com.br/api/pdv';
 ```
 
 Depois de salvo (SecureStore), o app restaura a sessão automaticamente na próxima
@@ -116,7 +117,7 @@ necessário abri-lo na aba **Caixa** antes de registrar venda.
 
 ## 6. Notas de implantação (VPS Ubuntu/Apache)
 
-- Publique `ColoAfeto/api/pdv/` sob o DocumentRoot (ex.: `/var/www/html/ColoAfeto`).
+- Publique `api/pdv/` sob o DocumentRoot `/var/www/html/coloeafetooficial`.
 - Garanta `AllowOverride All` no vhost do Apache para o `controle de acesso`/CORS
   já tratados em `bootstrap.php`.
 - HTTPS obrigatório (o app exige `https://` em produção; cert. Let's Encrypt).
@@ -130,7 +131,7 @@ necessário abri-lo na aba **Caixa** antes de registrar venda.
 
 ```bash
 # 1) API responde?
-curl -k https://www.coloafetooficial.com.br/ColoAfeto/api/pdv/me.php
+curl -k https://coloeafetooficial.com.br/api/pdv/me.php
 
 # 2) tsc limpo
 cd mobile && npx tsc --noEmit
