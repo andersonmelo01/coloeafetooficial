@@ -20,6 +20,7 @@ $autoPrint = isset($_GET['imprimir']) && $_GET['imprimir'] === '1';
 
 $pageTitle = ($fiscal ? 'Cupom fiscal (NFC-e)' : 'Cupom não fiscal') . ' ' . $venda['numero'];
 $active = 'admin';
+$styleVersion = is_file(dirname(__DIR__, 2) . '/assets/css/style.css') ? (string) filemtime(dirname(__DIR__, 2) . '/assets/css/style.css') : '1';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -29,8 +30,8 @@ $active = 'admin';
 <title><?= e($pageTitle) ?></title>
 <link rel="icon" href="<?= e(base_url('img/logo.jpeg')) ?>">
 <link href="<?= e(asset_url('bootstrap/css/bootstrap.min.css')) ?>" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-<link href="<?= e(asset_url('css/style.css')) ?>" rel="stylesheet">
+<link href="<?= e(asset_url('bootstrap-icons/bootstrap-icons.css')) ?>" rel="stylesheet">
+<link href="<?= e(asset_url('css/style.css') . '?v=' . $styleVersion) ?>" rel="stylesheet">
 </head>
 <body class="cupom-page">
 <main class="py-4">

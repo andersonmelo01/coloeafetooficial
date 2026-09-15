@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'fiscal.endereco_bairro' => 'fiscal',
         'fiscal.endereco_municipio' => 'fiscal',
         'fiscal.endereco_cep' => 'fiscal',
+        'estabelecimento.telefone' => 'fiscal',
         'fiscal.certificado_pfx' => 'fiscal',
         'fiscal.certificado_senha' => 'fiscal',
         'fiscal.reforma_tributaria_habilitada' => 'fiscal',
@@ -128,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'fiscal.endereco_bairro' => 'fiscal_endereco_bairro',
         'fiscal.endereco_municipio' => 'fiscal_endereco_municipio',
         'fiscal.endereco_cep' => 'fiscal_endereco_cep',
+        'estabelecimento.telefone' => 'estabelecimento_telefone',
         'fiscal.certificado_pfx' => 'fiscal_certificado_pfx',
         'fiscal.certificado_senha' => 'fiscal_certificado_senha',
         'fiscal.reforma_tributaria_habilitada' => 'fiscal_reforma_tributaria_habilitada',
@@ -195,6 +197,7 @@ require_once dirname(__DIR__, 2) . '/includes/header.php';
             <div class="col-md-4"><label class="form-label">Bairro</label><input class="form-control" name="fiscal_endereco_bairro" value="<?= e(app_config('fiscal.endereco_bairro', '')) ?>"></div>
             <div class="col-md-5"><label class="form-label">Município</label><input class="form-control" name="fiscal_endereco_municipio" value="<?= e(app_config('fiscal.endereco_municipio', '')) ?>"></div>
             <div class="col-md-3"><label class="form-label">CEP</label><input class="form-control" name="fiscal_endereco_cep" data-mask="cep" value="<?= e(app_config('fiscal.endereco_cep', '')) ?>"></div>
+            <div class="col-md-4"><label class="form-label">Telefone do estabelecimento</label><input class="form-control" name="estabelecimento_telefone" value="<?= e(app_config('estabelecimento.telefone', '')) ?>"></div>
             <div class="col-md-8"><label class="form-label">Upload certificado A1/PFX</label><input class="form-control" name="fiscal_certificado_upload" type="file" accept=".pfx,.p12,.pem,.crt,.key"><div class="form-text">Atual: <?= e(app_config('fiscal.certificado_pfx', 'nenhum')) ?></div></div>
             <div class="col-md-8"><label class="form-label">Caminho certificado PFX A1 manual</label><input class="form-control" name="fiscal_certificado_pfx" value="<?= e(app_config('fiscal.certificado_pfx', '')) ?>"></div>
             <div class="col-md-4"><label class="form-label">Senha certificado</label><input class="form-control" name="fiscal_certificado_senha" type="password" value="<?= e(app_config('fiscal.certificado_senha', '')) ?>"></div>

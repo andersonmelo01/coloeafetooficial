@@ -481,6 +481,7 @@ INSERT INTO configuracoes (chave, valor, grupo) VALUES
 ('fiscal.endereco_bairro', '', 'fiscal'),
 ('fiscal.endereco_municipio', '', 'fiscal'),
 ('fiscal.endereco_cep', '', 'fiscal'),
+('estabelecimento.telefone', '', 'fiscal'),
 ('fiscal.certificado_pfx', '', 'fiscal'),
 ('fiscal.certificado_senha', '', 'fiscal'),
 ('fiscal.reforma_tributaria_habilitada', '0', 'fiscal'),

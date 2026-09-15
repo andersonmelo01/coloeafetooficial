@@ -156,6 +156,10 @@ require_once dirname(__DIR__, 2) . '/includes/header.php';
 ?>
 <section class="py-5 report-print-shell"><div class="container"><div class="row g-4"><div class="col-lg-3 report-sidebar"><?php require dirname(__DIR__) . '/menu.php'; ?></div><div class="col-lg-9 report-content">
     <div class="panel-card bg-white p-4 mb-4 report-header-card">
+        <nav class="d-flex flex-wrap gap-2 mb-3 no-print" aria-label="Tipos de relatorio">
+            <a class="btn btn-brand btn-sm" href="<?= e(base_url('admin/relatorios/index.php')) ?>">Relatorios gerenciais</a>
+            <a class="btn btn-outline-brand btn-sm" href="<?= e(base_url('admin/relatorios/pdv.php')) ?>">PDV Facil</a>
+        </nav>
         <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-md-end">
             <div>
                 <h1 class="h3 section-title mb-1">Relatorios gerenciais</h1>

@@ -222,6 +222,7 @@ function pdv_portal_tabs(string $current): void
         'historico' => ['admin/vendas/historico.php', 'Vendas', 'bi-bag-check'],
         'receber' => ['admin/vendas/receber.php', 'A receber', 'bi-clock-history'],
         'caixa' => ['admin/vendas/caixa.php', 'Caixa', 'bi-cash-stack'],
+        'relatorios' => ['admin/relatorios/pdv.php', 'Relatorios', 'bi-graph-up'],
     ];
     echo '<div class="panel-card bg-white p-3 mb-4"><div class="d-flex flex-wrap gap-2">';
     foreach ($tabs as $key => [$path, $label, $icon]) {

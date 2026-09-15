@@ -1350,41 +1350,252 @@ a{ transition: all .25s ease; }
 .pdv-quick-add .btn{ padding: .55rem .75rem; font-weight: 600; }
 
 /* PDV - Cupom / impressão */
-.cupom-wrap{ max-width: 420px; margin: 0 auto; }
+.cupom-page{
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff7ef 0%, #f7f2ee 100%);
+}
+
+.cupom-wrap{
+  width: min(100%, 400px);
+  margin: 0 auto;
+}
+
+.cupom-actions{
+  display: flex;
+  justify-content: center;
+  gap: .65rem;
+  margin-bottom: 1rem;
+}
+
+.cupom-actions .btn{
+  border-radius: 8px;
+  padding: .62rem 1rem;
+}
+
 .cupom-paper{
+  position: relative;
+  overflow: hidden;
   background: #fff;
-  border: 1px solid #e2e2e2;
-  border-radius: .4rem;
-  padding: 1.25rem;
+  border: 1px solid rgba(107, 74, 63, .13);
+  border-radius: 8px;
+  padding: .7rem .8rem;
   font-family: 'Segoe UI', Arial, sans-serif;
-  color: #222;
+  font-size: .78rem;
+  color: #26211f;
+  line-height: 1.22;
+  box-shadow: 0 18px 40px rgba(107, 74, 63, .1);
 }
-.cupom-header{ text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 1rem; margin-bottom: 1rem; }
-.cupom-brand{ display: flex; flex-direction: column; align-items: center; gap:.5rem; font-size: 1.1rem; margin-bottom:.5rem; }
-.cupom-brand img{ height: 40px; width: auto; }
+
+.cupom-paper::before,
+.cupom-paper::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background:
+    radial-gradient(circle at 6px 50%, transparent 5px, #fff 5.5px) 0 0 / 18px 6px repeat-x;
+}
+
+.cupom-paper::before{ top: -1px; }
+.cupom-paper::after{ bottom: -1px; transform: rotate(180deg); }
+
+.cupom-header{
+  text-align: center;
+  border-bottom: 1px dashed #d9cbc4;
+  padding-bottom: .45rem;
+  margin-bottom: .45rem;
+}
+
+.cupom-brand{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  margin-bottom: .35rem;
+}
+
+.cupom-brand strong{
+  color: var(--afeto-marrom);
+  font-family: var(--font-title);
+  font-size: 1.12rem;
+  line-height: 1.1;
+}
+
 .cupom-fiscal-badge{
-  display: inline-block;
-  background: var(--brand-color, #b5838d);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  background: var(--brand-color, var(--afeto-laranja));
   color: #fff;
-  padding:.25rem.75rem;
+  padding: .18rem .48rem;
   border-radius: 999px;
-  font-weight: 700;
-  font-size:.88rem;
-  letter-spacing:.04em;
-  margin-top:.5rem;
-}
-.cupom-fiscal-badge.cupom-nao-fiscal{ background: #6c757d; }
-.cupom-meta{ font-size:.78rem; color: #555; margin-top:.1rem; }
-.cupom-title{ font-weight: 700; font-size: 1rem; text-align: center; margin-bottom:.35rem; }
-.cupom-section-title{
-  font-size:.68rem;
+  font-weight: 800;
+  font-size: .62rem;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  letter-spacing:.08em;
-  color:#999;
-  font-weight:700;
-  margin-bottom:.35rem;
 }
-.cupom-tbl{ font-size:.82rem; }
+
+.cupom-fiscal-badge.cupom-nao-fiscal{ background: #5f6570; }
+.cupom-meta{ font-size: .68rem; color: #62554f; margin-top: .1rem; }
+.cupom-key{ word-break: break-all; }
+.cupom-section{ min-width: 0; }
+
+.cupom-info-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .18rem .55rem;
+}
+
+.cupom-section + .cupom-info-grid{
+  margin-top: .42rem;
+}
+
+.cupom-info-grid div,
+.cupom-client,
+.cupom-info-line{
+  min-width: 0;
+  border: 0;
+  border-bottom: 1px dotted #e4d7d0;
+  border-radius: 0;
+  background: transparent;
+  padding: .12rem 0;
+}
+
+.cupom-info-grid span,
+.cupom-client span,
+.cupom-info-line span{
+  display: block;
+  color: #7e6d65;
+  font-size: .56rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cupom-info-grid strong,
+.cupom-client strong,
+.cupom-info-line strong{
+  display: block;
+  margin-top: .04rem;
+  color: #2d2522;
+  font-size: .7rem;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
+.cupom-client{ margin-top: .2rem; }
+
+.cupom-info-stack{
+  display: grid;
+  gap: .06rem;
+}
+
+.cupom-info-line{
+  display: grid;
+  grid-template-columns: minmax(72px, .62fr) minmax(0, 1.38fr);
+  align-items: start;
+  gap: .35rem;
+  padding: .1rem 0;
+}
+
+.cupom-info-line span,
+.cupom-info-line strong{
+  margin: 0;
+}
+
+.cupom-section-title{
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  color: #76655f;
+  font-size: .6rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  line-height: 1.2;
+  margin: .42rem 0 .22rem;
+  text-transform: uppercase;
+}
+
+.cupom-section-title::after{
+  content: '';
+  flex: 1;
+  border-top: 1px dashed #e3d4cc;
+}
+
+.cupom-item{
+  padding: .28rem 0;
+  border-bottom: 1px dashed #ece1dc;
+}
+
+.cupom-item-name{
+  color: #2d2522;
+  font-size: .76rem;
+  font-weight: 700;
+  line-height: 1.22;
+  overflow-wrap: anywhere;
+}
+
+.cupom-item-meta,
+.cupom-total-line,
+.cupom-pay-line{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.cupom-item-meta{
+  margin-top: .1rem;
+  color: #695b55;
+  font-size: .7rem;
+}
+
+.cupom-item-meta strong{
+  color: #2d2522;
+  white-space: nowrap;
+}
+
+.cupom-item-fiscal{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .08rem .34rem;
+  margin-top: .12rem;
+  color: #6e615d;
+  font-size: .58rem;
+  line-height: 1.25;
+}
+
+.cupom-item-tax{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .08rem .34rem;
+  margin-top: .12rem;
+  color: #2d2522;
+  font-size: .62rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.cupom-item-fiscal span,
+.cupom-item-tax span{
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cupom-item-fiscal b,
+.cupom-item-tax b{
+  color: #3a312e;
+  font-weight: 800;
+}
+
+.cupom-tbl{
+  width: 100%;
+  min-width: 0;
+  font-size: .7rem;
+}
 .cupom-tbl td,
 .cupom-tbl th{
   overflow-wrap: anywhere;
@@ -1393,65 +1604,158 @@ a{ transition: all .25s ease; }
 }
 .cupom-tbl td:nth-child(2),
 .cupom-tbl th:nth-child(2){ white-space: nowrap; }
-.cupom-tbl thead th{
-  font-size:.68rem;
-  text-transform: uppercase;
-  letter-spacing:.05em;
-  color:#999;
-  font-weight:700;
-  border:0;
+
+.cupom-total-line{
+  padding: .1rem 0;
+  color: #4b403c;
+  font-size: .74rem;
 }
-.cupom-total-line{ display:flex; justify-content:space-between; padding:.12rem 0; font-size:.9rem; }
+
+.cupom-total-line span:last-child,
+.cupom-pay-line span:last-child{
+  white-space: nowrap;
+}
+
 .cupom-total-final{
-  border-top:2px solid #e0e0e0;
-  margin-top:.35rem;
-  padding-top:.5rem;
-  font-weight:700;
-  font-size:1.02rem;
-  color: var(--brand-color, #b5838d);
+  border-top: 1px dashed #bfb2ab;
+  margin-top: .24rem;
+  padding-top: .28rem;
+  color: var(--brand-color, var(--afeto-laranja));
+  font-weight: 800;
+  font-size: .88rem;
 }
-.cupom-total-final span:last-child{ font-size:1.08rem; }
+
+.cupom-total-final span:last-child{ font-size: .96rem; }
+.cupom-payments{ font-size: .74rem; }
+
 .cupom-payments .cupom-pay-line{
-  font-size:.88rem;
-  padding:.18rem 0;
-  border-bottom:1px dashed #f0f0f0;
+  padding: .15rem 0;
+  border-bottom: 1px dashed #ece1dc;
+  font-size: .74rem;
 }
+
+.cupom-pay-line > span:first-child{
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cupom-pay-line small:not(.cupom-status){
+  display: block;
+  color: #7e6d65;
+  font-size: .58rem;
+  line-height: 1.25;
+}
+
+.cupom-pay-value{
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+
 .cupom-pay-line .cupom-status{
-  font-size:.66rem;
-  font-weight:600;
+  flex: 0 0 auto;
+  border: 1px solid #f2d48a;
+  border-radius: 999px;
+  background: #fff8e5;
+  color: #856404;
+  padding: .08rem .32rem;
+  font-size: .55rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  line-height: 1.2;
   text-transform: uppercase;
-  letter-spacing:.04em;
-  background:#fff3cd;
-  color:#856404;
-  border-radius:999px;
-  padding:.08rem .45rem;
 }
+
 .cupom-pend-total td{
-  border-top:2px solid #e0e0e0 !important;
-  font-weight:700;
-  color: var(--brand-color, #b5838d);
+  border-top: 2px solid #e2d5ce !important;
+  color: var(--brand-color, var(--afeto-laranja));
+  font-weight: 800;
 }
-.cupom-totals .fw-bold{ color: var(--brand-color, #b5838d); }
-.cupom-payments{ font-size:.9rem; }
+
 .pix-copiaecola{
   word-break: break-all;
-  background: #f8f9fa;
-  border: 1px dashed #ddd;
-  padding:.65rem;
-  border-radius:.3rem;
-  font-size:.78rem;
+  background: #fff;
+  border: 1px dashed #d8c8c0;
+  border-radius: 4px;
+  padding: .36rem;
+  font-size: .62rem;
+  line-height: 1.28;
 }
-.cupom-footer{ font-size:.82rem; color: #555; }
-.cupom-footer hr{ border:0; border-top:2px dashed #e0e0e0; margin:.9rem 0 .6rem; }
+
+.cupom-qrcode{
+  width: min(180px, 72%);
+  height: auto;
+  border: 5px solid #fff;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(107, 74, 63, .12);
+}
+
+.cupom-footer{
+  color: #62554f;
+  font-size: .68rem;
+}
+
+.cupom-footer p{ margin-bottom: .14rem; }
+.cupom-footer hr{ border: 0; border-top: 1px dashed #d9cbc4; margin: .5rem 0 .35rem; }
+
+@media (max-width: 420px){
+  .cupom-page main{ padding-top: 1rem !important; padding-bottom: 1rem !important; }
+  .cupom-paper{ padding: .65rem; }
+  .cupom-actions .btn{ flex: 1; padding-inline: .75rem; }
+  .cupom-info-line{ grid-template-columns: 1fr; gap: .12rem; }
+}
 
 @media print {
-  .cupom-page{ background: #fff; }
+  @page{ size: 80mm auto; margin: 4mm; }
+  body.cupom-page,
+  .cupom-page{ background: #fff !important; }
+  .cupom-page main{ padding: 0 !important; }
   .cupom-page nav,
   .cupom-page .mobile-tabbar,
   .cupom-page .chat-widget,
   .cupom-page .d-print-none{ display: none !important; }
-  .cupom-paper{ box-shadow: none; border: 0; padding: .4rem; max-width: 100%; }
-  .cupom-paper, .cupom-paper *{ font-size-adjust: none; }
+  .cupom-wrap{ width: 100%; max-width: 80mm; }
+  .cupom-paper{
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: 100%;
+    padding: 0;
+  }
+  .cupom-paper::before,
+  .cupom-paper::after{ display: none; }
+  .cupom-paper,
+  .cupom-paper *{
+    color: #000 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    font-size-adjust: none;
+  }
+  .cupom-fiscal-badge{
+    border: 1px solid #000;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .cupom-info-grid div,
+  .cupom-client,
+  .cupom-info-line,
+  .pix-copiaecola{
+    border-color: #bbb;
+    background: #fff !important;
+  }
+  .cupom-info-line{
+    grid-template-columns: minmax(62px, .62fr) minmax(0, 1.38fr);
+    padding: .08rem 0;
+    border-width: 0 0 1px;
+    border-radius: 0;
+  }
+  .cupom-brand strong{ font-size: 1rem; }
+  .cupom-section-title{ margin-top: .32rem; }
+  .cupom-item{ padding: .22rem 0; }
+  .cupom-item-fiscal{
+    font-size: .55rem;
+    gap: .08rem .28rem;
+  }
 }
 
 /* Chat - Drawer moderno */
@@ -1706,5 +2010,59 @@ a{ transition: all .25s ease; }
     bottom:.5rem;
     width:auto;
     max-height:80vh;
+  }
+}
+
+/* Relatórios gerenciais / PDV */
+.report-print-shell .panel-card{
+  border: 1px solid rgba(107, 74, 63, .12);
+}
+.report-section{
+  box-shadow: none;
+}
+.report-tab-title{
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  margin-bottom: 1rem;
+}
+.report-tab-title h2{
+  margin-bottom: 0;
+  font-family: var(--font-title);
+  color: var(--afeto-marrom);
+}
+.report-tab-title span{
+  font-size: .8rem;
+  color: var(--afeto-marrom-suave);
+}
+
+@media print {
+  .no-print,
+  .site-navbar,
+  .site-footer,
+  .report-sidebar,
+  .report-sidebar .admin-sidebar,
+  .mobile-tabbar,
+  .chat-widget{
+    display: none !important;
+  }
+  body.reports-page{
+    background: #fff !important;
+  }
+  .report-content{
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+  .report-print-shell .container{
+    max-width: 100% !important;
+  }
+  .report-print-shell .panel-card{
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+  }
+  .report-print-shell svg{
+    max-width: 100%;
   }
 }
