@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native';
 import { colors, radius, typography } from '../theme';
 import { money, parseMoneyInput } from '../utils/format';
@@ -28,6 +28,12 @@ export const MoneyInput: React.FC<Props> = ({
   const inputRef = useRef<TextInput>(null);
   const [text, setText] = useState(money(value));
   const [focused, setFocused] = useState(false);
+
+  useEffect(() => {
+    if (!focused) {
+      setText(money(value));
+    }
+  }, [value, focused]);
 
   const handleChange = (raw: string) => {
     const digits = raw.replace(/[^\d]/g, '');

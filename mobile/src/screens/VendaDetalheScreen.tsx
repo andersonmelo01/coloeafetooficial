@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '../components/Screen';
 import { AppButton } from '../components/AppButton';
@@ -14,7 +15,7 @@ import { RootStackParamList } from '../navigation';
 type DetalheRouteProp = RouteProp<RootStackParamList, 'VendaDetalhe'>;
 
 export const VendaDetalheScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<DetalheRouteProp>();
   const { token } = useAuth();
   const { show } = useToast();
@@ -126,6 +127,13 @@ export const VendaDetalheScreen: React.FC = () => {
             <Text style={styles.total}>{venda.total_formatado}</Text>
           </View>
         </View>
+
+        <AppButton
+          title="Abrir cupom"
+          icon="receipt"
+          variant="outline"
+          onPress={() => navigation.navigate('Cupom', { vendaId: route.params.vendaId })}
+        />
 
         {venda.status !== 'cancelada' && (
           <Pressable style={styles.cancelBtn} onPress={cancelar}>

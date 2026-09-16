@@ -11,6 +11,8 @@ import { CheckoutScreen } from '../screens/CheckoutScreen';
 import { ResultScreen } from '../screens/ResultScreen';
 import { HistoricoScreen } from '../screens/HistoricoScreen';
 import { VendaDetalheScreen } from '../screens/VendaDetalheScreen';
+import { CupomScreen } from '../screens/CupomScreen';
+import { RelatoriosScreen } from '../screens/RelatoriosScreen';
 import { CaixaScreen } from '../screens/CaixaScreen';
 import { AjustesScreen } from '../screens/AjustesScreen';
 import { useAuth } from '../contexts/AuthContext';
@@ -23,11 +25,13 @@ export type RootStackParamList = {
   Checkout: undefined;
   Result: { vendaId: number };
   VendaDetalhe: { vendaId: number };
+  Cupom: { vendaId: number };
 };
 
 export type PdvTabParamList = {
   Pdv: undefined;
   Historico: undefined;
+  Relatorios: undefined;
   Caixa: undefined;
   Ajustes: undefined;
 };
@@ -59,6 +63,16 @@ const MainTabs: React.FC = () => {
         options={{
           title: 'Vendas',
           tabBarIcon: ({ color, size }) => <Ionicons name="receipt" size={size} color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Relatorios"
+        component={RelatoriosScreen}
+        options={{
+          title: 'Relatórios',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bar-chart" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -115,6 +129,11 @@ export const AppNavigator: React.FC = () => {
             name="VendaDetalhe"
             component={VendaDetalheScreen}
             options={{ headerShown: true, title: 'Venda', headerTintColor: colors.primaryDark }}
+          />
+          <Stack.Screen
+            name="Cupom"
+            component={CupomScreen}
+            options={{ headerShown: true, title: 'Cupom', headerTintColor: colors.primaryDark }}
           />
         </>
       ) : (

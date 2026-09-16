@@ -48,6 +48,15 @@ export const ResultScreen: React.FC = () => {
       </View>
 
       <View style={styles.section}>
+        <AppButton
+          title="Ver cupom"
+          icon="receipt"
+          variant="outline"
+          onPress={() => navigation.navigate('Cupom', { vendaId })}
+        />
+      </View>
+
+      <View style={styles.section}>
         <Text style={styles.label}>Enviar cupom por e-mail</Text>
         <AppInput
           value={email}
