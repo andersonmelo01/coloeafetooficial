@@ -106,6 +106,36 @@ function mobile_money($value): float
     return round(pdv_money_to_float((string) $value), 2);
 }
 
+/**
+ * Normaliza datas vindas do app (dd/mm/aaaa ou aaaa-mm-dd) para o formato
+ * aceito pelo MySQL (aaaa-mm-dd). Retorna '' quando nao for uma data valida.
+ */
+function mobile_date_mysql(string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return '';
+    }
+
+    if (preg_match('/^(\d{2})\/(\d{2})\/(\d{4})$/', $value, $m)) {
+        $dia = (int) $m[1];
+        $mes = (int) $m[2];
+        $ano = (int) $m[3];
+        if (checkdate($mes, $dia, $ano)) {
+            return sprintf('%04d-%02d-%02d', $ano, $mes, $dia);
+        }
+        return '';
+    }
+
+    if (preg_match('/^(\d{4})-(\d{2})-(\d{2})/', $value, $m)) {
+        if (checkdate((int) $m[2], (int) $m[3], (int) $m[1])) {
+            return sprintf('%04d-%02d-%02d', (int) $m[1], (int) $m[2], (int) $m[3]);
+        }
+    }
+
+    return '';
+}
+
 function mobile_config(): array
 {
     $pixStatus = efi_can_charge_method('pix_qrcode');

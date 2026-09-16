@@ -94,7 +94,7 @@ foreach ($pagamentosRequisicao as $rawPag) {
         'metodo' => $metodo,
         'valor' => $valor,
         'parcelas' => max(1, (int) ($rawPag['parcelas'] ?? 1)),
-        'vencimento' => (string) ($rawPag['vencimento'] ?? ''),
+        'vencimento' => mobile_date_mysql((string) ($rawPag['vencimento'] ?? '')),
         'token' => trim((string) ($rawPag['token'] ?? '')),
     ];
 }

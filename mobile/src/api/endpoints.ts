@@ -6,6 +6,7 @@ import {
   LoginResponse,
   MeResponse,
   ProdutosResponse,
+  RelatorioResponse,
   VendaCriadaResponse,
   VendaDetalheResponse,
   VendaEnvio,
@@ -103,6 +104,27 @@ export async function enviarCupom(
   email: string
 ): Promise<{ ok: true; message: string }> {
   return post('/cupom.php', { venda_id: vendaId, email }, token);
+}
+
+export async function getRelatorio(
+  token: string | null,
+  params: {
+    inicio: string;
+    fim: string;
+    status?: string;
+    metodo?: string;
+    vendedor?: number;
+    cliente?: number;
+  }
+): Promise<RelatorioResponse> {
+  const qs = new URLSearchParams();
+  qs.set('inicio', params.inicio);
+  qs.set('fim', params.fim);
+  if (params.status) qs.set('status', params.status);
+  if (params.metodo) qs.set('metodo', params.metodo);
+  if (params.vendedor) qs.set('vendedor', String(params.vendedor));
+  if (params.cliente !== undefined) qs.set('cliente', String(params.cliente));
+  return get<RelatorioResponse>(`/relatorio.php?${qs.toString()}`, token);
 }
 
 export async function updateApiUrl(url: string): Promise<void> {

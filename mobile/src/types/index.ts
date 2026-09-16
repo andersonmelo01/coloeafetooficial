@@ -259,6 +259,108 @@ export interface VendaEnvio {
   pagamentos: PagamentoEnvio[];
 }
 
+export interface RelatorioKpis {
+  vendas: number;
+  faturamento: number;
+  subtotal: number;
+  descontos: number;
+  ticket_medio: number;
+  itens: number;
+  faturamento_formatado: string;
+  subtotal_formatado: string;
+  descontos_formatado: string;
+  ticket_medio_formatado: string;
+}
+
+export interface RelatorioMetodo {
+  metodo: string;
+  metodo_label: string;
+  vendas: number;
+  pago: number;
+  pendente: number;
+  total: number;
+  pago_formatado: string;
+  pendente_formatado: string;
+  total_formatado: string;
+}
+
+export interface RelatorioVendedor {
+  vendedor: string;
+  vendas: number;
+  valor: number;
+  ticket_medio: number;
+  valor_formatado: string;
+  ticket_medio_formatado: string;
+}
+
+export interface RelatorioProduto {
+  nome: string;
+  quantidade: number;
+  valor: number;
+  valor_formatado: string;
+}
+
+export interface RelatorioCliente {
+  cliente: string;
+  vendas: number;
+  valor: number;
+  valor_formatado: string;
+}
+
+export interface RelatorioCrediario {
+  parcelas: number;
+  a_receber: number;
+  recebido: number;
+  a_receber_formatado: string;
+  recebido_formatado: string;
+}
+
+export interface RelatorioVenda {
+  id: number;
+  numero: string;
+  status: string;
+  total: number;
+  total_formatado: string;
+  cliente: string;
+  vendedor: string;
+  data: string;
+}
+
+export interface RelatorioOpcaoStatus {
+  valor: string;
+  label: string;
+}
+
+export interface RelatorioOpcaoMetodo {
+  slug: string;
+  label: string;
+}
+
+export interface RelatorioOpcaoPessoa {
+  id: number;
+  nome: string;
+}
+
+export interface RelatorioResponse {
+  ok: true;
+  periodo: { inicio: string; fim: string; inicio_formatado: string; fim_formatado: string };
+  filtros: { status: string; metodo: string; vendedor: number; cliente: number };
+  kpis: RelatorioKpis;
+  canceladas: { n: number; valor: number; valor_formatado: string };
+  por_metodo: RelatorioMetodo[];
+  por_vendedor: RelatorioVendedor[];
+  top_produtos: RelatorioProduto[];
+  top_clientes: RelatorioCliente[];
+  crediario: RelatorioCrediario;
+  vendas: RelatorioVenda[];
+  opcoes: {
+    status: RelatorioOpcaoStatus[];
+    metodos: RelatorioOpcaoMetodo[];
+    vendedores: RelatorioOpcaoPessoa[];
+    clientes: RelatorioOpcaoPessoa[];
+  };
+}
+
 export interface CartItem {
   produto_id: number;
   nome: string;
